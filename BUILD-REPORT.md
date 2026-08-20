@@ -199,3 +199,89 @@ Assertions: bounded receipt, combined fixed snapshot/readback, zero-pair proof, 
 ### Phase 2 disposition
 
 Tasks 2.1 through 2.4 passed independently. Task 2.5 is explicitly deferred to the conductor’s downstream `verify_milestone` phase. No external advisory or repository evidence was fabricated; authenticated live corpus execution remains a Phase 3 gate.
+
+## Phase 3: End-to-end analysis and proof
+
+### Implemented
+
+- Added the durable import, evidence refresh, proposed-fix, baseline, and final-proof lifecycle in `src/jobs/pipeline.ts`.
+- Added five pg-boss queues and worker dispatch in `src/jobs/queue.ts` and `src/worker.ts`.
+- Added reproducible frozen-corpus proof orchestration in `scripts/proof.ts` and six corpus contract tests.
+- Added idempotent phase/proposed-fix persistence, run-scoped replay keys, bounded HydraDB mutation batches, prefix-filtered paginated relationship readback, and deterministic application-root readback retry.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `pnpm typecheck` | PASS |
+| `pnpm test` | PASS (4/4) |
+| Frozen corpus replay through native graph path | BLOCKED at immutable GitHub SHA retrieval: `GITHUB_RATE_LIMITED` |
+| Evidence handling | FAIL-CLOSED; no live evidence or proof receipt fabricated |
+
+### External blocker
+
+`BLK-EXT-001`: `secrets/github_token` is empty and GitHub rate-limited the authenticated immutable SHA retrieval during the Phase 3 corpus replay. The pipeline is intentionally continuing through later local Build phases; provide a valid token or wait for reset, then rerun the Phase 3 corpus gate before final evidence publication.
+
+### Phase 3 disposition
+
+Implementation tasks 3.1–3.3 are complete and locally type/unit verified. The corpus gate remains deferred as an explicit external blocker; downstream Build continues without treating partial local output as authentic proof.
+
+## Phase 4: Incident command UI and BFF
+
+### Implemented
+
+- Added the strict 15-row BFF dispatcher covering all 16 API contracts with request IDs, idempotency, bounded verification inputs, immutable proof links, and fail-closed errors.
+- Added the action-first incident command surface, role projections, responsive/focus/reduced-motion CSS, incident queue/detail, impact matrix, proposed-fix workflow, plan verification, receipt index/detail, portfolio, graph, imports, jobs, and system routes.
+- Added the eight-scene Playwright demo suite with desktop/mobile, accessibility, keyboard focus, and browser-history assertions.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `pnpm typecheck` | PASS |
+| 15 dispatcher-row assertion | PASS |
+| `pnpm build` with local secret files | PASS |
+| Standalone E2E | BLOCKED by host database wiring; Compose profile remains required |
+
+### Phase 4 disposition
+
+Tasks 4.1–4.5 are implemented and compile/build successfully. Browser proof remains runtime-gated; no screenshots or authentic happy-path claims are credited until the migrated Compose stack runs the suite.
+
+## Phase 5: Adversarial hardening and rehearsal
+
+### Implemented
+
+- Added the Architecture §19 failure matrix for all route contracts, immutable snapshot/receipt conflicts, pair tampering, SARIF refusal, source/scope/snapshot drift, and fail-closed API envelopes.
+- Strengthened HydraDB contract assertions so mutation anomalies remain `PARTIAL` and added fail-closed checks to corpus/browser suites.
+- Added `submission/DEMO-SCRIPT.md` with eight timed scenes, stop conditions, rehearsal checklist, and language guard.
+
+### Verification
+
+| Check | Result |
+|---|---|
+| `pnpm typecheck` | PASS |
+| `pnpm test` | PASS (4/4) |
+| Secret scan | PASS |
+| `docker compose port hydradb 8443` | No host binding |
+| Adversarial/corpus/rehearsal runtime | BLOCKED before execution by database wiring and `BLK-EXT-001`; no pass fabricated |
+
+### Phase 5 disposition
+
+Hardening and rehearsal artifacts are complete. The full matrix and timed rehearsal remain runtime-gated and must be rerun through migrated Compose before final package/preflight.
+
+## Phase 6: Deployment and final evidence preparation
+
+### Completed locally
+
+- Added root `README.md` with setup and an explicit “How HydraDB is used” section.
+- Added MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, submission architecture/proof/checklist documents, canonical track/award naming, and the public repository target.
+- Kept fresh `receipt.json`/SARIF and demo URL absent rather than fabricating them while the proof gate is blocked.
+
+### External blockers
+
+- `DEP-001`: persistent Oracle Always Free ARM64 VM (or equivalent) is mandatory before Deploy; no cloud credentials/provisioning are available in this session.
+- `BLK-EXT-001`: empty GitHub token/rate limit still prevents authentic frozen corpus replay and final receipt generation.
+
+### Phase 6 disposition
+
+Local packaging is prepared. Deployment, restart proof, live tests, fresh receipt/SARIF, and final preflight remain pending the external VM and GitHub credential checkpoints.

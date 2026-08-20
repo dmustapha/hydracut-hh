@@ -75,7 +75,7 @@ export interface DependencyEdge {
 export interface ExtractedSnapshot {
   key: string;
   identity: RepositoryIdentity;
-  lockfileVersion: 2 | 3;
+  lockfileVersion: 1 | 2 | 3;
   packages: PackageInstance[];
   applicationEdges: DependencyEdge[];
   edges: DependencyEdge[];

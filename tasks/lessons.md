@@ -87,3 +87,9 @@
 - Do not equate public reachability with cloud hosting: a tunnel still depends on the user's local machine remaining online.
 - When the user requires deployment independent of local hardware, every persistent runtime service must move to remote compute.
 - Zero cost and cloud persistence must both be verified before closing the credential checkpoint; neither may be silently traded away.
+
+## 2026-08-20 — External Build blockers do not stop local conductor progress
+
+- Record the exact external error, missing credential, and rerun action in state and reports.
+- Continue auth-independent implementation and downstream phases without converting partial output into evidence.
+- Reopen the blocked gate only when the external state changes; preserve fail-closed behavior meanwhile.

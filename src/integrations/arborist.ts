@@ -121,7 +121,7 @@ export async function extractSnapshot(input: {
     if (edges.some((edge) => !packageKeys.has(edge.fromKey) || !packageKeys.has(edge.toKey)) ||
       rootPackageKeys.some((key) => !packageKeys.has(key))) throw new Error("DEPENDENCY_ENDPOINT_MISSING");
     const parsed = JSON.parse(Buffer.from(input.lockfile).toString("utf8")) as { lockfileVersion?: number };
-    if (parsed.lockfileVersion !== 2 && parsed.lockfileVersion !== 3) throw new Error("LOCKFILE_VERSION");
+    if (parsed.lockfileVersion !== 1 && parsed.lockfileVersion !== 2 && parsed.lockfileVersion !== 3) throw new Error("LOCKFILE_VERSION");
     const normalized = { packages, applicationEdges, edges, rootPackageKeys };
     return {
       key: input.snapshotKey,

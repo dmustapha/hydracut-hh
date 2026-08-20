@@ -313,3 +313,67 @@
 
 #### For Next Skill
 - Build Phase 3 must execute the end-to-end evidence corpus and baseline native MSpaths proof with configured credentials or record an explicit external-credential blocker.
+
+---
+### build: 2026-08-20T05:20:00Z
+**Status:** PARTIAL
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Implemented the Phase 3 lifecycle pipeline, durable queues/worker, reproducible proof script, and six-test corpus contract.
+- Verified `pnpm typecheck` and `pnpm test` (4/4); native graph path reached immutable GitHub SHA retrieval.
+- Hardened HydraDB readback with snapshot-prefix pagination, 100-row mutation batches, request-scoped mutation keys, and deterministic application-root retry.
+
+#### Blocker
+- `BLK-EXT-001`: local `secrets/github_token` is empty and GitHub returned `GITHUB_RATE_LIMITED` during the authentic frozen corpus replay. No evidence or receipt was fabricated.
+
+#### For Next Skill
+- Continue Build Phase 4 locally. Return to the Phase 3 corpus gate when a valid GitHub token or rate-limit reset is available, before final evidence publication.
+
+---
+### build: 2026-08-20T05:35:00Z
+**Status:** PARTIAL
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Phase 4 BFF/UI scope and eight-scene browser suite implemented.
+- `pnpm typecheck`, 15-row dispatcher assertion, and production `pnpm build` pass with runtime secret files.
+
+#### Blockers
+- Phase 3 `BLK-EXT-001` remains: empty GitHub token / rate limit blocks authentic corpus replay.
+- Phase 4 browser suite requires the migrated Compose database/runtime; standalone host E2E is not credited.
+
+#### For Next Skill
+- Continue Build Phase 5 adversarial hardening and rehearsal locally. Run browser and corpus gates through Compose when runtime credentials are available.
+
+---
+### build: 2026-08-20T05:45:00Z
+**Status:** PARTIAL
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Added the mandatory adversarial failure matrix, mutation `PARTIAL` assertions, fail-closed browser/corpus checks, and timed eight-scene demo script.
+- `pnpm typecheck`, `pnpm test` (4/4), secret scan, and private HydraDB port gate pass.
+
+#### Blockers
+- Full adversarial/corpus/rehearsal execution is runtime-gated by Compose database wiring and `BLK-EXT-001`; no pass or receipt was fabricated.
+- Persistent cloud VM `DEP-001` remains mandatory before Deploy; local Docker/Quick Tunnel is not final deployment.
+
+#### For Next Skill
+- Continue Phase 6 local artifact/deployment preparation. Pause only at the required external VM/credential checkpoint.
+
+---
+### build: 2026-08-20T06:00:00Z
+**Status:** PARTIAL
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Prepared root README, HydraDB usage explanation, MIT license, third-party notices, submission architecture/proof/checklist documents, canonical track/award naming, and repository target.
+- Deliberately omitted fresh receipt/SARIF/demo URL claims while authentic proof is unavailable.
+
+#### Blockers
+- `BLK-EXT-001`: GitHub token/rate limit blocks the immutable corpus replay.
+- `DEP-001`: persistent zero-cost cloud VM credentials/provisioning are unavailable; local Docker/Quick Tunnel is not final deployment.
+
+#### For Next Skill
+- Build is locally complete but cannot close the deployment/final-evidence gate. Resume at Deploy once the VM and GitHub credential are available, then run downstream conductor phases.

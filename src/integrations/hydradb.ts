@@ -60,6 +60,7 @@ async function query(
       "content-type": "application/json",
       "x-graph-namespace": namespace,
       "x-consistency": "strong",
+      "idempotency-key": canonicalDigest({ cypher, parameters }),
     },
     body: JSON.stringify({
       cell_id: "cell-0",
@@ -67,7 +68,7 @@ async function query(
       parameters,
       consistency: "strong",
     }),
-    headersTimeout: 3_000,
+    headersTimeout: 15_000,
     bodyTimeout: 30_000,
   });
   let retried = false;
@@ -156,8 +157,16 @@ function rowsOf(response: QueryResponse): Array<Record<string, unknown>> {
 
 async function relationshipRows(prefix: string, retryRead = true): Promise<Array<Record<string, unknown>>> {
   const rows: Array<Record<string, unknown>> = [];
+  const pageSize = 500;
   for (const type of ["PROD_DEPENDS_ON", "DEV_DEPENDS_ON", "OPTIONAL_DEPENDS_ON", "PEER_DEPENDS_ON", "MATCHES_INCIDENT", "USES_SNAPSHOT"]) {
-    rows.push(...rowsOf(await query(`MATCH ()-[r:${type}]->() RETURN r.key AS key`, {}, retryRead)));
+    for (let offset = 0; ; offset += pageSize) {
+      const page = rowsOf(await query(
+        `MATCH ()-[r:${type}]->() WHERE r.key STARTS WITH $prefix RETURN r.key AS key SKIP ${offset} LIMIT ${pageSize}`,
+        { prefix }, retryRead,
+      ));
+      rows.push(...page);
+      if (page.length < pageSize) break;
+    }
   }
   return rows.filter((row) => typeof row.key === "string" && row.key.startsWith(prefix));
 }
@@ -305,6 +314,12 @@ export async function runTraversal(bounds: TraversalBounds): Promise<TraversalRe
   return validateTraversalResponse(bounds, counts, response);
 }
 
+function chunks<T>(rows: T[], size = 100): T[][] {
+  const result: T[][] = [];
+  for (let index = 0; index < rows.length; index += size) result.push(rows.slice(index, index + size));
+  return result;
+}
+
 export async function writeSnapshot(snapshot: ExtractedSnapshot): Promise<void> {
   const nodes = snapshot.packages.map((item) => ({ ...item, id: deterministicId(item.key) }));
   await assertNodeIdRegistry(nodes);
@@ -312,7 +327,7 @@ export async function writeSnapshot(snapshot: ExtractedSnapshot): Promise<void> 
 MERGE (n {id: row.id}) SET n:PackageInstance, n.key = row.key,
 n.snapshot_key = row.snapshotKey, n.name = row.name, n.version = row.version,
 n.purl = row.purl, n.location = row.location`;
-  await query(nodeQuery, { rows: nodes });
+  for (const batch of chunks(nodes)) await query(nodeQuery, { rows: batch });
   for (const scope of ["production", "development", "optional", "peer"] as Scope[]) {
     const type = relationshipByScope[scope];
     const edges = snapshot.edges.filter((edge) => edge.scope === scope).map((edge) => ({
@@ -323,9 +338,9 @@ n.purl = row.purl, n.location = row.location`;
     }));
     if (!edges.length) continue;
     await assertRelationshipIdRegistry(edges, type);
-    await query(`UNWIND $rows AS row
+    for (const batch of chunks(edges)) await query(`UNWIND $rows AS row
 MATCH (a:PackageInstance {id: row.from}), (b:PackageInstance {id: row.to})
-MERGE (a)-[r:${type} {id: row.id}]->(b) SET r.key = row.key`, { rows: edges });
+MERGE (a)-[r:${type} {id: row.id}]->(b) SET r.key = row.key`, { rows: batch });
   }
 }
 
@@ -333,11 +348,16 @@ export async function writeApplicationRoot(snapshot: ExtractedSnapshot): Promise
   const appKey = `application:${snapshot.key}`;
   const appId = deterministicId(appKey);
   await assertNodeIdRegistry([{ id: appId, key: appKey }]);
-  await query(`UNWIND $rows AS row
+  const rootRows = [{ id: appId, key: appKey, applicationKey: snapshot.identity.repository, snapshotKey: snapshot.key }];
+  const rootQuery = `UNWIND $rows AS row
 MERGE (n {id: row.id}) SET n:ApplicationSnapshot, n.key = row.key,
-n.application_key = row.applicationKey, n.snapshot_key = row.snapshotKey`, {
-    rows: [{ id: appId, key: appKey, applicationKey: snapshot.identity.repository, snapshotKey: snapshot.key }],
-  });
+ n.application_key = row.applicationKey, n.snapshot_key = row.snapshotKey`;
+  for (const attempt of [0, 1]) {
+    await query(rootQuery, { rows: rootRows, attempt });
+    const present = rowsOf(await query("MATCH (n:ApplicationSnapshot {id: $id}) RETURN n.key AS key", { id: appId }, true));
+    if (present.some((row) => row.key === appKey)) break;
+    if (attempt === 1) throw new Error("APPLICATION_ROOT_WRITE_MISMATCH");
+  }
   for (const scope of ["production", "development", "optional", "peer"] as Scope[]) {
     const type = relationshipByScope[scope];
     const rows = snapshot.applicationEdges.filter((edge) => edge.scope === scope).map((edge) => ({
@@ -348,9 +368,9 @@ n.application_key = row.applicationKey, n.snapshot_key = row.snapshotKey`, {
     }));
     if (!rows.length) continue;
     await assertRelationshipIdRegistry(rows, type);
-    await query(`UNWIND $rows AS row
+    for (const batch of chunks(rows)) await query(`UNWIND $rows AS row
 MATCH (a:ApplicationSnapshot {id: row.from}), (b:PackageInstance {id: row.to})
-MERGE (a)-[r:${type} {id: row.id}]->(b) SET r.key = row.key`, { rows });
+MERGE (a)-[r:${type} {id: row.id}]->(b) SET r.key = row.key`, { rows: batch });
   }
 }
 
@@ -369,7 +389,9 @@ export async function verifySnapshotReadback(snapshot: ExtractedSnapshot): Promi
   const actualKeys = edges.map(({ key }) => String(key)).sort();
   if (nodes.length !== snapshot.packages.length) throw new Error("PACKAGE_READBACK_MISMATCH");
   if (roots.length !== 1) throw new Error("APPLICATION_ROOT_READBACK_MISMATCH");
-  if (canonicalDigest(actualKeys) !== canonicalDigest(expectedKeys)) throw new Error("EDGE_READBACK_MISMATCH");
+  if (canonicalDigest(actualKeys) !== canonicalDigest(expectedKeys)) {
+    throw new Error("EDGE_READBACK_MISMATCH");
+  }
 }
 
 export async function writeScenario(input: {

@@ -342,3 +342,8 @@
 > can you clear out space yourself? youre free to clear out our old docker processes to create space
 
 **Action:** Accepted authorization to stop stale Docker processes and reclaim unused Docker build cache while preserving named HydraCut data volumes; added `.dockerignore` and began runtime recovery.
+
+### Prompt 48
+> if build 3 records blockers, you should be able to continue and then i resolve the external blockers when im awake. can you do that?
+
+**Action:** Confirmed external Build blockers will be recorded precisely while auth-independent Build and downstream conductor phases continue without fabricated evidence; dispatched Phase 4 after recording the GitHub rate-limit blocker.

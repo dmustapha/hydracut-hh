@@ -2,6 +2,7 @@
   "name": "hydracut-app",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "engines": { "node": "24.10.0", "pnpm": "11.22.0" },
   "packageManager": "pnpm@11.22.0",
   "scripts": {

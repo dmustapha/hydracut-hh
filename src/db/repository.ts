@@ -46,7 +46,7 @@ export async function saveSnapshot(row: typeof snapshots.$inferInsert): Promise<
     key: value.key, portfolioKey: value.portfolioKey, repository: value.repository, commitSha: value.commitSha,
     manifestSha256: value.manifestSha256, lockfileSha256: value.lockfileSha256,
     extractionSha256: value.extractionSha256, packageCount: value.packageCount, edgeCount: value.edgeCount,
-    maxDepth: value.maxDepth, topology: value.topology, identity: value.identity,
+    maxDepth: value.maxDepth,
   });
   if (!stored || canonicalDigest(immutable(stored)) !== canonicalDigest(immutable(row))) {
     throw new Error("SNAPSHOT_INSERT_CONFLICT");
@@ -163,7 +163,7 @@ export async function saveProposedFix(
     baselinePairDigest: baseline.pairDigest,
     baselineSnapshotKeys: [...baseline.snapshotKeys].sort(),
     state: fix.state,
-  });
+  }).onConflictDoNothing();
 }
 
 export async function listProposedFixes(incidentKey: string) {
@@ -345,7 +345,7 @@ export async function appendPhaseEvent(input: {
   attempt: number;
   detail: Record<string, unknown>;
 }): Promise<void> {
-  await db.insert(phaseEvents).values(input);
+  await db.insert(phaseEvents).values(input).onConflictDoNothing();
 }
 
 export async function appendAuditEvent(event: string, subjectKey: string, detail: Record<string, unknown>): Promise<void> {
