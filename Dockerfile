@@ -8,6 +8,9 @@ RUN pnpm install --frozen-lockfile
 
 FROM dependencies AS build
 COPY . .
+# Dynamic pages import the database client during Next's build-time route analysis.
+# Keep runtime secret injection unchanged while providing a non-network placeholder here.
+ENV DATABASE_URL_FILE="" DATABASE_URL=postgresql://build:build@127.0.0.1:5432/build
 RUN pnpm typecheck && pnpm test && pnpm build
 
 FROM dependencies AS tooling
@@ -42,6 +45,10 @@ WORKDIR /app
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nextjs
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
+# pnpm's symlinked @swc/helpers package is only partially traced by Next standalone.
+# Include its ESM helpers so the standalone server can resolve Next's generated imports.
+COPY --from=build --chown=nextjs:nodejs /app/node_modules/.pnpm/@swc+helpers@0.5.23/node_modules/@swc/helpers/esm ./node_modules/.pnpm/@swc+helpers@0.5.23/node_modules/@swc/helpers/esm
+COPY --from=build --chown=nextjs:nodejs /app/node_modules/.pnpm/@swc+helpers@0.5.23/node_modules/@swc/helpers ./node_modules/.pnpm/next@16.3.1_@playwright+test@1.62.1_@types+node@24.10.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@swc/helpers
 USER nextjs
 EXPOSE 3000
 CMD ["node", "server.js"]
