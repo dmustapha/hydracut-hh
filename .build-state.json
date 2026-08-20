@@ -1,0 +1,114 @@
+{
+  "project": "hydracut-hh",
+  "projectLabel": "HydraCut powered by CampaignRadius",
+  "currentPhase": "phase-1",
+  "currentStep": "1.1",
+  "currentSubStep": "1.1.a",
+  "status": "in-progress",
+  "autonomous_mode": true,
+  "expected_phases": [
+    "phase-0-compatibility-runtime-truth",
+    "phase-1-domain-persistence-authentic-seed",
+    "phase-2-external-graph-integrations",
+    "phase-3-end-to-end-analysis-proof",
+    "phase-4-incident-command-ui",
+    "phase-5-adversarial-hardening-rehearsal",
+    "phase-6-deployment-final-evidence"
+  ],
+  "phase_ledger": [
+    {
+      "phase": "phase-0-compatibility-runtime-truth",
+      "started_at": "2026-08-20T02:22:02Z",
+      "completed_at": "2026-08-20T02:38:00Z",
+      "evidence": "Frozen pnpm install, TypeScript 7.0.2, digest-pinned HydraDB, healthy PostgreSQL, private ports, and amd64 dependencies image independently verified"
+    }
+  ],
+  "completedSteps": [
+    "0.1",
+    "0.2",
+    "0.3"
+  ],
+  "fileGroups": {
+    "0.1": {
+      "files": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "pnpm-lock.yaml",
+        "tsconfig.json",
+        "next.config.ts",
+        "vitest.config.ts",
+        "playwright.config.ts"
+      ],
+      "written": true,
+      "verified": true
+    },
+    "0.2": {
+      "files": [
+        "Dockerfile",
+        "docker-compose.yml",
+        "Caddyfile",
+        ".env",
+        "secrets/postgres_password",
+        "secrets/database_url",
+        "secrets/hydradb_token",
+        "secrets/github_token",
+        "secrets/app_operator_token"
+      ],
+      "written": true,
+      "verified": true
+    },
+    "0.3": {
+      "files": [
+        "docs/evidence/build-toolchain.txt",
+        "tasks/todo.md",
+        "pipeline-log.md"
+      ],
+      "written": true,
+      "verified": true
+    }
+  },
+  "deviations": [
+    {
+      "step": "0.1",
+      "id": "DEV-001",
+      "description": "Approved exact esbuild lifecycle scripts after pnpm blocked three locked postinstalls",
+      "reason": "pnpm 11.22.0 returned ERR_PNPM_IGNORED_BUILDS",
+      "class": "DEGRADED",
+      "impact": "Frozen install remains exact and reproducible"
+    },
+    {
+      "step": "0.2",
+      "id": "DEV-002",
+      "description": "Initialized HydraDB under image-owned /tmp/graph with a non-root wrapper",
+      "reason": "Pinned image has no writable /data and requires existing store/cache directories",
+      "class": "DEGRADED",
+      "impact": "Deployment must preserve the wrapper"
+    },
+    {
+      "step": "0.3",
+      "id": "DEV-003",
+      "description": "Full application/runtime amd64 Dockerfile image deferred; dependencies stage passed",
+      "reason": "Phase 0 forbids application source files",
+      "class": "UNTESTED",
+      "impact": "Phase 1/6 must run the complete amd64 image build before deployment claims"
+    }
+  ],
+  "phaseExecutors": {
+    "phase-0": "subagent"
+  },
+  "contractAddresses": {},
+  "env": {},
+  "devPort": 3000,
+  "depsVerified": true,
+  "verification_commands": [
+    "pnpm install --frozen-lockfile",
+    "pnpm exec tsc --version",
+    "docker compose config --quiet",
+    "docker image inspect ghcr.io/hydra-db/hydradb@sha256:db78309a233be54662db29744047e985a39b51c45a270d1a1f47c31a62cdb709 --format {{index .RepoDigests 0}}",
+    "docker compose ps",
+    "docker build --platform linux/amd64 --target dependencies -t hydracut-phase0-amd64 ."
+  ],
+  "screenshot_paths": [],
+  "context_percentage": 0,
+  "timestamp": "2026-08-20T02:38:00Z"
+}

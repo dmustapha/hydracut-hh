@@ -1,0 +1,88 @@
+{
+  "version": 5,
+  "status": "complete",
+  "autonomous_mode": false,
+  "currentPhase": "complete",
+  "poolSize": 17,
+  "killed": [
+    {
+      "name": "Lineage Tripwire",
+      "cause": "Gate 0: unreachable first-five-user channel and saturated fallback buyer surface"
+    },
+    {
+      "name": "Escape Routes",
+      "cause": "Gates 0b and 2: no reliable compatibility authority and not credible in 2.5 days"
+    }
+  ],
+  "flagged": [
+    {
+      "name": "HydraCut",
+      "flag": "CATALOG-ADJACENT",
+      "sharedPrimitives": 2
+    },
+    {
+      "name": "Patch Parallax",
+      "flag": "CATALOG-ADJACENT",
+      "sharedPrimitives": 2
+    }
+  ],
+  "scores": [
+    {"name": "CampaignRadius", "totalWeighted": 8.2, "catalogFlag": "CLEAR"},
+    {"name": "Patch Parallax", "totalWeighted": 8.13, "catalogFlag": "CATALOG-ADJACENT"},
+    {"name": "HydraCut", "totalWeighted": 7.93, "catalogFlag": "CATALOG-ADJACENT"},
+    {"name": "Blast Replay", "totalWeighted": 7.53, "catalogFlag": "CLEAR"},
+    {"name": "Maintainer Fuse", "totalWeighted": 6.67, "catalogFlag": "CLEAR"}
+  ],
+  "winner": {"name": "CampaignRadius", "score": 8.2, "riskLevel": "MEDIUM"},
+  "phase_ledger": [
+    {
+      "phase": "setup",
+      "started_at": "2026-08-18T19:56:05Z",
+      "completed_at": "2026-08-18T20:05:00Z",
+      "evidence": "config.json plus three verified setup maps in warroom/"
+    },
+    {
+      "phase": "generate",
+      "started_at": "2026-08-18T20:05:00Z",
+      "completed_at": "2026-08-18T20:08:00Z",
+      "evidence": "17 ideas with all 17 required generator fields"
+    },
+    {
+      "phase": "synthesis",
+      "started_at": "2026-08-18T20:08:00Z",
+      "completed_at": "2026-08-18T20:12:00Z",
+      "evidence": "warroom/transcript.md contains seven deduplicated candidates"
+    },
+    {
+      "phase": "gate",
+      "started_at": "2026-08-18T20:12:00Z",
+      "completed_at": "2026-08-18T20:15:00Z",
+      "evidence": "Five survivors and two gate deaths recorded with causes"
+    },
+    {
+      "phase": "score",
+      "started_at": "2026-08-18T20:15:00Z",
+      "completed_at": "2026-08-18T20:24:00Z",
+      "evidence": "Three independent scorers ranked five survivors; top three within 0.27"
+    },
+    {
+      "phase": "fact_check",
+      "started_at": "2026-08-18T20:24:00Z",
+      "completed_at": "2026-08-18T20:31:00Z",
+      "evidence": "warroom/fact-check.md verifies top three and corrects historical snapshot claim"
+    },
+    {
+      "phase": "select",
+      "started_at": "2026-08-18T20:31:00Z",
+      "completed_at": "2026-08-18T20:34:00Z",
+      "evidence": "CampaignRadius selected at 8.20 with CLEAR catalog assessment and zero failed claims"
+    }
+  ],
+  "artifacts": {
+    "primitivesSheet": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/warroom/primitives-sheet.md",
+    "competitorOpportunityMap": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/warroom/competitor-opportunity-map.md",
+    "marketRealityMap": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/warroom/market-reality-map.md",
+    "winnerBrief": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/WINNER-BRIEF.md",
+    "transcript": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/warroom/transcript.md"
+  }
+}

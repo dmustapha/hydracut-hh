@@ -1,0 +1,33 @@
+{
+  "hackathon_name": "Hack Hydra",
+  "deadline": "2026-08-20T23:59:00-07:00",
+  "hackathon_type": "Infra / Tooling",
+  "prizes": {
+    "grand_champion": 5000,
+    "runner_up": 3000,
+    "third_place": 1500,
+    "best_use_of_hydradb": 500
+  },
+  "tracks": [
+    "Enterprise Context and Ontology",
+    "Repos, Dependencies and Code as Graphs",
+    "Memory and Context Retrieval"
+  ],
+  "selected_track": "Track 02-A: Supply Chain Blast Radius",
+  "track_strategy": "single-track",
+  "judging_criteria": [
+    "Technical execution",
+    "Use of HydraDB and graph-native approaches",
+    "Product completeness and usability",
+    "Quality of results",
+    "Originality"
+  ],
+  "sponsors": ["HydraDB"],
+  "core_tech": [
+    "Self-hosted HydraDB OSS",
+    "OpenCypher",
+    "algo.SPpaths",
+    "algo.SSpaths",
+    "algo.MSpaths"
+  ]
+}

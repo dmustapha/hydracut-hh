@@ -1,0 +1,92 @@
+{
+  "status": "verified-local-pre-forge",
+  "verified_at": "2026-08-19T00:00:00+01:00",
+  "hydradb": {
+    "image_digest": "sha256:db78309a233be54662db29744047e985a39b51c45a270d1a1f47c31a62cdb709",
+    "transport": "HTTP OpenCypher",
+    "consistency": "strong",
+    "operational_warning": "LocalFileSystem garbage collection logged unsupported put_opts update mode while reads and writes continued"
+  },
+  "corpus": {
+    "applications": 3,
+    "package_instances": 1742,
+    "application_dependency_edges": 43,
+    "package_dependency_edges": 2896,
+    "repositories": [
+      {
+        "repository": "bradtraversy/nodekb",
+        "baseline_commit": "0d2634e7310afc8f82aba1dc082632f68557abc9",
+        "candidate_commit": "5762100bfb342353e98f171238980e9b693ab520",
+        "baseline_lock_sha256": "5dd9da02108f8bf2bc58f9cd99977e9244424f602ff6cea3eb857254e5ac4e9e",
+        "candidate_lock_sha256": "88380b7cbd655d655bf1aa0c5a6ffae4ae25f8a838b4a770b6e55e0cdce94fe8"
+      },
+      {
+        "repository": "BetaHuhn/spaces-cli",
+        "baseline_commit": "7c7d74f777bf4dd08f348dee8522b2a1a1e471a1",
+        "candidate_commit": "17e68f80b8578ea1db64277888a712cc0d8a257f",
+        "baseline_lock_sha256": "3c9fbe5313f7a718f5e947139579cb303df257d6634099f55095684381f714d0",
+        "candidate_lock_sha256": "e5ddc567bd4d6e09795b04985452fdf38fc2053b614282c24671aca2749a1c66"
+      },
+      {
+        "repository": "arkon/crcmaker",
+        "baseline_commit": "227810dc672395ad24b4bd732128aa708e942bf2",
+        "candidate_commit": "d19651452306478be6b0dd582ecfcf024beebaeb",
+        "baseline_lock_sha256": "0fe60a4752b22c70d6c7c211843ba9eb6023dcd668686bfb6a1742ba86124ee6",
+        "candidate_lock_sha256": "77477a5b51e7176c28cb03fcb84ec8182271fa472946e0c268e0cdd6da0e5660"
+      }
+    ]
+  },
+  "selected_incident": {
+    "package": "minimist",
+    "affected_version": "1.2.5",
+    "candidate_version": "1.2.6",
+    "advisory": "GHSA-xvch-5gv4-984h",
+    "alias": "CVE-2021-44906",
+    "baseline_pairs": 3,
+    "runtime_only_pairs": 1,
+    "candidate_pairs": 0,
+    "baseline_query_elapsed_ms": 2417.52,
+    "candidate_query_elapsed_ms": 2432.33,
+    "runtime_only_query_elapsed_ms": 468.07,
+    "read_epoch": 2148,
+    "bookmark": "sgk:1:64656661756c74:64656661756c74:63656c6c2d30:2148"
+  },
+  "many_source_proof": {
+    "sources": [
+      "minimist@1.2.5",
+      "semver@5.7.1",
+      "brace-expansion@1.1.11"
+    ],
+    "targets": 3,
+    "baseline_match_edges": 11,
+    "candidate_match_edges": 8,
+    "baseline_source_target_pairs": 9,
+    "candidate_source_target_pairs": 6
+  },
+  "portfolio_osv_query": {
+    "unique_package_versions": 1253,
+    "package_versions_with_current_osv_matches": 105
+  },
+  "optimizer": {
+    "candidate_actions": 3,
+    "combinations": 8,
+    "residual_pairs_by_mask": [3, 2, 2, 1, 2, 1, 1, 0],
+    "exact_zero_residual_mask": 7
+  },
+  "thin_scenario_projection": {
+    "verified": true,
+    "nodes_per_scenario": 4,
+    "edges_per_scenario_min": 3,
+    "edges_per_scenario_max": 6,
+    "mask_0_read_epoch": 2453,
+    "mask_7_read_epoch": 2484,
+    "mask_7_bookmark": "sgk:1:64656661756c74:64656661756c74:63656c6c2d30:2484"
+  },
+  "failure_semantics": {
+    "result_limit_one_rows": 1,
+    "complete_bound_rows": 3,
+    "explicit_truncation_flag_present": false,
+    "detach_delete_probe_before": 1,
+    "detach_delete_probe_after": 0
+  }
+}

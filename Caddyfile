@@ -1,0 +1,14 @@
+{
+  email {$ACME_EMAIL}
+}
+
+{$APP_DOMAIN} {
+  request_body {
+    max_size 32MB
+  }
+  @unauthorized not header Authorization "Bearer {$APP_OPERATOR_TOKEN}"
+  respond @unauthorized 401
+  @unsupported method DELETE PUT PATCH
+  respond @unsupported 405
+  reverse_proxy web:3000
+}

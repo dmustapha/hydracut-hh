@@ -1,0 +1,137 @@
+{
+  "version": "1.1",
+  "hackathon_name": "Hack Hydra",
+  "project_name": "hydracut",
+  "working_dir": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra",
+  "winning_idea": "HydraCut powered by CampaignRadius",
+  "source": "warroom-plus-user-amendment",
+  "status": "complete",
+  "current_phase": "complete",
+  "current_substep": "4d",
+  "phases_complete": ["phase-0.5", "phase-0", "phase-0a", "phase-0b", "phase-1", "phase-1.5", "phase-2", "phase-2.5", "phase-3", "phase-3.5", "phase-4"],
+  "phase_ledger": [
+    {
+      "phase": "phase_0_5",
+      "started_at": "2026-08-19T18:42:38Z",
+      "completed_at": "2026-08-19T18:42:38Z",
+      "evidence": "SKIPPED: no inspirationRepos array is present in .warroom-state.json"
+    },
+    {
+      "phase": "phase_0",
+      "started_at": "2026-08-19T18:42:38Z",
+      "completed_at": "2026-08-19T18:44:00Z",
+      "evidence": "Current thesis, concerns, copied research, emergency scope, and full-stack family recorded under hydracut/"
+    },
+    {
+      "phase": "phase_0a",
+      "started_at": "2026-08-19T18:44:00Z",
+      "completed_at": "2026-08-19T18:44:00Z",
+      "evidence": "SKIPPED: source is completed warroom plus explicit user-approved scope, not a direct raw idea"
+    },
+    {
+      "phase": "phase_0b",
+      "started_at": "2026-08-19T18:44:00Z",
+      "completed_at": "2026-08-19T18:48:31Z",
+      "evidence": "hydracut/DEEP-RESEARCH.md records exact versions, primary sources, contracts, alternatives, and unresolved Build gates"
+    },
+    {
+      "phase": "phase_1_to_2_5",
+      "started_at": "2026-08-19T18:48:31Z",
+      "completed_at": "2026-08-19T21:10:00Z",
+      "evidence": "PRD 6/6 and Architecture 10/10 independent quality gates pass"
+    },
+    {
+      "phase": "phase_3",
+      "started_at": "2026-08-19T21:10:00Z",
+      "completed_at": "2026-08-19T21:48:00Z",
+      "evidence": "PLAN.md covers 53/53 files, 26/26 tasks, 21/21 risk trees, and 7/7 phase gates"
+    },
+    {
+      "phase": "phase_3_5",
+      "started_at": "2026-08-19T21:48:00Z",
+      "completed_at": "2026-08-19T21:54:00Z",
+      "evidence": "Independent final audit PASS: Architecture 10/10, Plan 7/7, cross-document 9/9, THESIS-1..5 PASS"
+    },
+    {
+      "phase": "phase_4",
+      "started_at": "2026-08-19T21:54:00Z",
+      "completed_at": "2026-08-19T21:55:58Z",
+      "evidence": "Forge artifacts, state, observables, credentials, traceability, scorecard, PULSE, tasks, and educational handoff finalized"
+    }
+  ],
+  "autonomous_mode": true,
+  "timestamps": {
+    "started": "2026-08-19T18:42:38Z",
+    "completed": "2026-08-19T21:55:58Z"
+  },
+  "documents": {
+    "prd": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/hydracut/PRD.md",
+    "architecture": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/hydracut/ARCHITECTURE.md",
+    "architecture_sections_complete": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"],
+    "implementation_plan": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/hydracut/PLAN.md",
+    "mini_verdict": null,
+    "deep_research": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/hydracut/DEEP-RESEARCH.md",
+    "feature_observables": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/FEATURE-OBSERVABLES.md",
+    "traceability": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/TRACEABILITY.md",
+    "quality_scorecard": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/hydracut/FORGE-QUALITY.md"
+  },
+  "quality_scores": {
+    "prd": {"status": "PASS", "metrics_passed": 6, "metrics_total": 6},
+    "architecture": {"status": "PASS", "metrics_passed": 10, "metrics_total": 10, "cross_doc_passed": 4, "cross_doc_total": 4, "critical_blockers": 0},
+    "implementation_plan": {"status": "PASS", "metrics_passed": 7, "metrics_total": 7, "critical_blockers": 0},
+    "cross_doc_audit": {"status": "PASS", "checks_passed": 9, "checks_total": 9},
+    "thesis_coherence": {"status": "PASS", "checks_passed": 5, "checks_total": 5},
+    "phase_scorecard": {"status": "PASS", "score": 94, "winner_readiness": 92, "critical_gate_failures": 0}
+  },
+  "hashes": {
+    "prd_sha256": "5945ed320017f80579f5b8d89399851a8541d50de623fcd5b8a9e1b1ef3a75c0",
+    "architecture_sha256": "c718aa44a3b505a1617201bfbd4d05f13c922dc4965e562c209c2301a90458ba",
+    "plan_sha256": "ae84b67b9c9b147138486b67e6884e74e323d64b57fbf84d3e1340695ea419f6"
+  },
+  "thesis": {
+    "winning_argument": "HydraCut is a proof-carrying AppSec incident command system powered by CampaignRadius and two load-bearing native HydraDB traversals.",
+    "demo_obligation": "Judges witness immutable hashes, live baseline MSpaths, authentic proposed-fix comparison, one final combined MSpaths proof, and honest remaining exposure.",
+    "hero_flow": "Incident queue to incident evidence to proposed fixes to coverage plan to combined verification to proof receipt.",
+    "invariants": ["self-hosted HydraDB OSS", "authentic immutable inputs", "bounded reproducible fail-closed results", "no LLM or vector decision path", "no universal safety language"]
+  },
+  "corrections": [
+    "Root WINNER-BRIEF.md is historical; current thesis is hydracut/warroom/WINNER-BRIEF.md plus the approved handoff and scope.",
+    "User-facing candidate terminology replaced by proposed fix.",
+    "Exhaustive subset enumeration demoted to regression evidence; the product uses coverage selection plus one combined final proof."
+  ],
+  "tech_stack": {
+    "family": "Full-Stack Web",
+    "languages": ["TypeScript", "OpenCypher"],
+    "frameworks": ["Next.js 16.3.1", "React 19.2.8", "Tailwind CSS 4.3.3", "PostgreSQL 18.6", "pg-boss 12.27.0"],
+    "deploy_target": "Single Linux VM with private Docker Compose network and persistent volumes"
+  },
+  "project_type": "full-stack",
+  "project_type_rationale": "Next.js frontend and API plus a durable worker and self-hosted HydraDB; no autonomous or LLM decision loop.",
+  "feature_observables_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/FEATURE-OBSERVABLES.md",
+  "feature_observables": [
+    {"feature_id": "F-001", "feature": "Frozen corpus import and provenance", "observable": "Six immutable snapshots reproduce frozen hashes and reseeding creates no duplicate", "verified_by": "corpus.integration"},
+    {"feature_id": "F-002", "feature": "Native baseline exposure", "observable": "Native MSpaths returns 3 selected and 9 verification pairs equal to BFS", "verified_by": "hydradb.contract plus corpus.integration"},
+    {"feature_id": "F-003", "feature": "Action-first incident command", "observable": "AppSec queue opens with real actionable incident and freshness", "verified_by": "Playwright F01 plus axe"},
+    {"feature_id": "F-004", "feature": "Authentic proposed-fix evaluation", "observable": "Three immutable later commits are fully reconstructed and classified", "verified_by": "corpus proposed-fix cases"},
+    {"feature_id": "F-005", "feature": "Coverage plan and combined final proof", "observable": "One fresh native traversal proves selected 3 to 0 and remaining 9 to 6", "verified_by": "proof runner plus stale-plan mutations"},
+    {"feature_id": "F-006", "feature": "Immutable receipt and SARIF", "observable": "Receipt digest recomputes and SARIF retains proof linkage", "verified_by": "Playwright F07 plus domain tests"},
+    {"feature_id": "F-007", "feature": "Fail-closed result states", "observable": "Every mandatory mutation removes verified language and refuses forbidden receipts", "verified_by": "domain, contract, corpus, adversarial tests"},
+    {"feature_id": "F-008", "feature": "Role-preserving projections", "observable": "Role changes preserve incident, scope, plan, receipt, history, and focus", "verified_by": "Playwright F08"},
+    {"feature_id": "F-009", "feature": "Public exact-commit import", "observable": "Resolved commit and fetched bytes match provenance with no repository script execution", "verified_by": "corpus GitHub/import cases"},
+    {"feature_id": "F-010", "feature": "Public proposed-fix discovery", "observable": "Paginated bot PR evidence is persisted before evaluation", "verified_by": "GitHub discovery contract cases"},
+    {"feature_id": "F-011", "feature": "Portfolio and system views", "observable": "Readiness and limits are visible without secret values", "verified_by": "Playwright F02"}
+  ],
+  "technical_spike": {
+    "needed": true,
+    "verified_patterns": ["HydraDB HTTP OpenCypher plus native MSpaths baseline and final proof", "GitHub exact-SHA retrieval and pull-request discovery", "OSV querybatch/detail plus KEV and EPSS enrichment", "Arborist loadVirtual without repository execution", "PostgreSQL plus pg-boss durable jobs", "OSV-Scanner 2.5.1 differential oracle and SARIF 2.1.0 export"],
+    "unverified_patterns": ["HydraDB x86_64 restart and storage behavior on final host", "TypeScript 7 dependency compatibility", "pg-boss 12.27.0 exact ESM contract", "live source rate-limit and freshness behavior"],
+    "assumed_patterns": ["Configured GitHub bot identity allowlist remains sufficient for Dependabot and Renovate discovery"]
+  },
+  "scope_mode": "emergency",
+  "peer_review": {
+    "amplifier": "DEGRADED_ADVISORY",
+    "thesis_2_crossmodel": "DEGRADED_ADVISORY",
+    "independent_local_audit": "PASS"
+  },
+  "errors": []
+}
