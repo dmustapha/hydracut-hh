@@ -8,8 +8,8 @@ Builder: `hackathon-build` under `hackathon-conductor`
 | Phase | Steps | Status | Notes |
 |---|---|---|---|
 | Phase 0: Compatibility and runtime truth | 0.1 to 0.3 | Complete | Exact toolchain and pinned self-hosted HydraDB runtime gate passed on ARM64; amd64 dependencies stage also passed |
-| Phase 1: Domain, persistence, and authentic seed | Pending | Pending | |
-| Phase 2: External and graph integrations | Pending | Pending | |
+| Phase 1: Domain, persistence, and authentic seed | 1.1 to 1.4 | Complete | Domain, persistence, migration, and authentic seed gates passed; 1.5 Verify deferred downstream |
+| Phase 2: External and graph integrations | 2.1 to 2.4 | Complete | Immutable adapters and pinned native HydraDB contract passed; 2.5 Verify deferred downstream |
 | Phase 3: End-to-end analysis and proof | Pending | Pending | |
 | Phase 4: Incident-command UI | Pending | Pending | |
 | Phase 5: Adversarial hardening and rehearsal | Pending | Pending | |
@@ -159,3 +159,43 @@ source_cache
 ### Phase 1 disposition
 
 Tasks 1.1 through 1.4 passed independently. Task 1.5 is explicitly deferred to the conductor’s `verify_milestone` phase, which must produce the milestone score before Design Forge. No `VERIFY-REPORT.md` or score was fabricated during Build.
+
+## Phase 2: External and graph integrations
+
+### Deviations
+
+| ID | Component | ARCHITECTURE Said | ACTUAL | Reason | Class | Downstream Impact |
+|---|---|---|---|---|---|---|
+| DEV-008 | External adapters | Use exact typed clients for immutable evidence sources | Undici, OSV body, and Arborist loading received narrow compatibility adjustments | Installed exact dependency typings differ from architecture examples | DEGRADED | Adapters are typed and fail closed; live authenticated contracts remain Phase 3 |
+| DEV-009 | External evidence | Live GitHub/OSV/CISA/FIRST contracts are proven in corpus analysis | Adapter boundaries and request validation are complete; live authenticated calls deferred | Phase 2 establishes integration seams; Phase 3 owns corpus execution | UNTESTED | Phase 3 must use configured credentials or record a blocker |
+| DEV-010 | HydraDB contract | Native graph proof runs against the pinned service | Initially unverified without the orchestrator environment; then passed in Compose | Agent execution lacked the token/container environment | UNTESTED → RESOLVED | Pinned-container contract is now 4/4 |
+| DEV-011 | Docker build | Non-TTY image build is reproducible | Dockerfile sets `CI=true` for pnpm cleanup | pnpm otherwise aborts module removal without confirmation | DEGRADED | Contract image builds in CI/non-TTY contexts |
+| DEV-012 | Docker context | Build context excludes local-only state | Added narrow `.dockerignore`; context measured at 7.7KB | Local `node_modules` previously produced a 510MB context during disk pressure | COSMETIC | Lower storage pressure and no secret/transient copy |
+| DEV-013 | Native graph boundary | Query responses are consumed as graph rows | Decoder handles HydraDB `columns`/`rows`, typed values, supported OpenCypher predicates, and typed relationship patterns | Pinned OSS digest rejects scalar RETURN, unlabeled scans, and untyped relationship patterns | DEGRADED | Native `algo.MSpaths`, deterministic registries, readback, and fail-closed validation are proven |
+
+### Verification Results
+
+| Step | Command | Expected | Actual | Pass? |
+|---|---|---|---|:---:|
+| 2.1 | `pnpm typecheck` | Exact adapter code typechecks | `$ tsc --noEmit`; exit 0 | YES |
+| 2.1 | `pnpm test` | Existing unit suite passes | `Test Files 1 passed`; `Tests 4 passed`; exit 0 | YES |
+| 2.2 | `docker compose build graph-contract` | Contract image builds with pinned toolchain | `hack-hydra-graph-contract Built`; reduced context; exit 0 | YES |
+| 2.3 | `docker compose run --rm graph-contract` | Native graph contract passes without fabricated evidence | `tests/hydradb.contract.test.ts`: 4 passed; exit 0 | YES |
+| 2.4 | Native response and readback assertions | Strong consistency, bookmark/read epoch, deterministic IDs, immutable snapshot readback, combined MSpaths proof | 4/4 contract assertions passed against digest-pinned HydraDB; exit 0 | YES |
+| 2.5 | Milestone Verify | Conductor runs separate Verify skill | Deferred; no score or report fabricated during Build | DEFERRED |
+
+### Native HydraDB evidence
+
+```text
+HydraDB image: ghcr.io/hydra-db/hydradb@sha256:db78309a233be54662db29744047e985a39b51c45a270d1a1f47c31a62cdb709
+docker compose build graph-contract: exit=0
+docker compose run --rm graph-contract: exit=0
+Test Files 1 passed (1)
+Tests 4 passed (4)
+Native query path: explicit OpenCypher + CALL algo.MSpaths + strong consistency
+Assertions: bounded receipt, combined fixed snapshot/readback, zero-pair proof, unavailable-service fail-closed, mutation refusal
+```
+
+### Phase 2 disposition
+
+Tasks 2.1 through 2.4 passed independently. Task 2.5 is explicitly deferred to the conductor’s downstream `verify_milestone` phase. No external advisory or repository evidence was fabricated; authenticated live corpus execution remains a Phase 3 gate.

@@ -26,3 +26,7 @@
 2026-08-20T03:42:00Z | hackathon-build | START | phase-1 | Implementing domain truth, persistence, and authentic seed
 2026-08-20T03:56:00Z | hackathon-build | COMPLETE | phase-1 | Domain tests, strict typecheck, migration, schema, and seed markers verified; milestone Verify deferred downstream
 2026-08-20T02:41:37Z | build | COMPLETE | build | gate=pass
+2026-08-20T03:56:00Z | hackathon-build | START | phase-2 | Implementing immutable external adapters and native HydraDB contract
+2026-08-20T04:10:00Z | hackathon-build | WARN | phase-2 | Initial graph-contract image hit non-TTY pnpm cleanup and Docker overlay storage pressure; set CI=true, added .dockerignore, and reclaimed unused build cache without touching named volumes
+2026-08-20T04:22:00Z | hackathon-build | WARN | phase-2 | Pinned HydraDB rejected scalar RETURN, unlabeled scans, and untyped relationship patterns; integration adapted to supported OpenCypher and columnar typed rows
+2026-08-20T04:28:00Z | hackathon-build | COMPLETE | phase-2 | Native HydraDB contract passed 4/4 in digest-pinned Compose; Phase 3 dispatch next; milestone Verify deferred downstream

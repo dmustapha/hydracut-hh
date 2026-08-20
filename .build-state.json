@@ -1,9 +1,9 @@
 {
   "project": "hydracut-hh",
   "projectLabel": "HydraCut powered by CampaignRadius",
-  "currentPhase": "phase-2",
-  "currentStep": "2.1",
-  "currentSubStep": "2.1.a",
+  "currentPhase": "phase-3",
+  "currentStep": "3.1",
+  "currentSubStep": "3.1.a",
   "status": "in-progress",
   "autonomous_mode": true,
   "expected_phases": [
@@ -27,6 +27,12 @@
       "started_at": "2026-08-20T03:42:00Z",
       "completed_at": "2026-08-20T03:56:00Z",
       "evidence": "Domain tests 4/4, TypeScript 7.0.2, migration applied, 12 PostgreSQL tables verified, and authentic seed markers passed"
+    },
+    {
+      "phase": "phase-2-external-graph-integrations",
+      "started_at": "2026-08-20T04:00:00Z",
+      "completed_at": "2026-08-20T04:28:00Z",
+      "evidence": "GitHub/OSV/CISA/FIRST/Arborist adapters typechecked; pinned HydraDB native contract passed in Compose with 4/4 tests, columnar response decoding, deterministic ID checks, immutable snapshot readback, and native MSpaths proof"
     }
   ],
   "completedSteps": [
@@ -36,7 +42,11 @@
     "1.1",
     "1.2",
     "1.3",
-    "1.4"
+    "1.4",
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.4"
   ],
   "fileGroups": {
     "0.1": {
@@ -111,6 +121,40 @@
       ],
       "written": true,
       "verified": true
+    },
+    "2.1": {
+      "files": [
+        "src/integrations/github.ts",
+        "src/integrations/osv.ts",
+        "src/integrations/enrichment.ts",
+        "src/integrations/arborist.ts"
+      ],
+      "written": true,
+      "verified": true
+    },
+    "2.2": {
+      "files": [
+        "src/integrations/hydradb.ts"
+      ],
+      "written": true,
+      "verified": true
+    },
+    "2.3": {
+      "files": [
+        "tests/hydradb.contract.test.ts",
+        "Dockerfile",
+        ".dockerignore"
+      ],
+      "written": true,
+      "verified": true
+    },
+    "2.4": {
+      "files": [
+        "src/integrations/hydradb.ts",
+        "tests/hydradb.contract.test.ts"
+      ],
+      "written": true,
+      "verified": true
     }
   },
   "deviations": [
@@ -163,6 +207,54 @@
       "impact": "Project code remains strict; dependency declaration compatibility remains a risk"
     },
     {
+      "step": "2.1",
+      "id": "DEV-008",
+      "description": "Applied compatibility adjustments for installed Undici, OSV request typing, and Arborist declarations",
+      "reason": "Pinned dependency versions expose narrower runtime/type surfaces than architecture examples",
+      "class": "DEGRADED",
+      "impact": "Adapters remain typed and fail closed; live authenticated contracts remain Phase 3 work"
+    },
+    {
+      "step": "2.1",
+      "id": "DEV-009",
+      "description": "Deferred authenticated GitHub, OSV, CISA, and FIRST live contract execution to Phase 3 corpus work",
+      "reason": "Phase 2 establishes adapters and immutable request boundaries; external evidence corpus belongs to end-to-end analysis",
+      "class": "UNTESTED",
+      "impact": "Phase 3 must use configured credentials or record an explicit external-credential blocker"
+    },
+    {
+      "step": "2.2",
+      "id": "DEV-010",
+      "description": "Native HydraDB contract was initially unverified until the pinned Compose service and token environment were supplied",
+      "reason": "The implementation agent ran without the orchestrator-provided runtime environment",
+      "class": "UNTESTED",
+      "impact": "Resolved in Phase 2 by the pinned-container 4/4 contract run"
+    },
+    {
+      "step": "2.3",
+      "id": "DEV-011",
+      "description": "Set CI=true in the Docker dependencies stage",
+      "reason": "Non-TTY pnpm module cleanup aborted the graph-contract image build without confirmation",
+      "class": "DEGRADED",
+      "impact": "Container builds are deterministic in CI/non-TTY contexts"
+    },
+    {
+      "step": "2.3",
+      "id": "DEV-012",
+      "description": "Added a narrow .dockerignore for local dependencies, secrets, VCS, and transient outputs",
+      "reason": "The initial Docker context included local node_modules and reached 510MB during a full-disk condition",
+      "class": "COSMETIC",
+      "impact": "Build context is 7.7KB for the contract image and avoids copying ignored local state"
+    },
+    {
+      "step": "2.4",
+      "id": "DEV-013",
+      "description": "Adapted native integration to HydraDB columnar rows and constrained OpenCypher support",
+      "reason": "The pinned OSS digest returns columns/rows, rejects scalar RETURN and unlabeled scans, and requires typed relationship patterns",
+      "class": "DEGRADED",
+      "impact": "The contract now proves native MSpaths, deterministic registries, readback, and fail-closed response validation"
+    },
+    {
       "step": "1.5",
       "id": "DEV-007",
       "description": "Deferred milestone Verify to conductor verify_milestone",
@@ -173,7 +265,8 @@
   ],
   "phaseExecutors": {
     "phase-0": "subagent",
-    "phase-1": "subagent"
+    "phase-1": "subagent",
+    "phase-2": "subagent-luna"
   },
   "contractAddresses": {},
   "env": {},
@@ -195,8 +288,9 @@
   ],
   "screenshot_paths": [],
   "context_percentage": 0,
-  "timestamp": "2026-08-20T03:56:00Z",
+  "timestamp": "2026-08-20T04:28:00Z",
   "deferredSteps": [
-    "1.5"
+    "1.5",
+    "2.5"
   ]
 }

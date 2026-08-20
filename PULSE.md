@@ -292,3 +292,24 @@
 
 #### For Next Skill
 - Debug must prioritize the three Build deviations and revalidate the private HydraDB runtime before higher-level tests.
+
+---
+### build: 2026-08-20T04:28:00Z
+**Status:** PARTIAL
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Phase 2 external adapters are present for immutable GitHub, OSV, CISA/FIRST enrichment, Arborist lockfile extraction, and native HydraDB access.
+- Docker storage pressure was recovered by killing stale Docker CLI/backend processes and pruning 8.9GB of unused build cache only; named PostgreSQL/HydraDB volumes were preserved.
+- `docker compose build graph-contract` and the digest-pinned native contract pass: 4/4 tests, including strong-consistency receipt metadata, immutable snapshot/readback, zero-pair combined proof, fail-closed outage behavior, and mutation refusal.
+- HydraDB integration now decodes the pinned service’s columnar typed rows and uses only supported constrained OpenCypher patterns while retaining explicit native `algo.MSpaths`.
+
+#### Deviations
+- DEV-008 through DEV-013 are recorded in `BUILD-REPORT.md` and `.build-state.json`.
+- Live authenticated GitHub/OSV/CISA/FIRST corpus execution remains deferred to Build Phase 3; no evidence was fabricated.
+
+#### Blockers for Downstream
+- None for Phase 2. Build continues with internal Phase 3; milestone Verify remains deferred to the conductor’s downstream `verify_milestone`.
+
+#### For Next Skill
+- Build Phase 3 must execute the end-to-end evidence corpus and baseline native MSpaths proof with configured credentials or record an explicit external-credential blocker.

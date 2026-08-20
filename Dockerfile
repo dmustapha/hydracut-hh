@@ -1,5 +1,6 @@
 FROM node:24.10.0-bookworm-slim AS dependencies
 ENV PNPM_HOME=/pnpm PATH=/pnpm:$PATH
+ENV CI=true
 RUN corepack enable && corepack prepare pnpm@11.22.0 --activate
 WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
