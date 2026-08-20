@@ -106,3 +106,56 @@ drwx------ secrets
 ## Phase 0 Completion
 
 All PLAN Phase 0 commands and gates passed independently. Phase 0 is complete with DEV-001, DEV-002, and the intentionally deferred DEV-003 full application image gate.
+
+## Phase 1: Domain, persistence, and authentic seed
+
+### Deviations
+
+| ID | Component | ARCHITECTURE Said | ACTUAL | Reason | Class | Downstream Impact |
+|---|---|---|---|---|---|---|
+| DEV-004 | Migration invocation | `docker compose run --rm migrate` runs the migration directly | Non-TTY invocation requires `docker compose run --rm -e CI=true migrate` | pnpm aborts module-directory removal without CI confirmation | DEGRADED | All automated migration gates must pass `CI=true` explicitly |
+| DEV-005 | Domain type imports | Authored files compile as copied | Added the missing `Scope` type import in persistence/domain code | Strict TypeScript exposed an omitted type import in the authored body | COSMETIC | No runtime or data-contract impact |
+| DEV-006 | TypeScript declaration checking | Strict TypeScript 7 compilation with default library checking | Enabled `skipLibCheck` while keeping project strictness and exact optional/index checks | Drizzle declaration incompatibilities are external library typing noise under TypeScript 7 | DEGRADED | Application code remains strict; dependency declaration compatibility remains a known risk |
+| DEV-007 | Milestone verification | Phase 1 plan lists a `hackathon-verify` milestone invocation | Deferred `verify_milestone` to the conductor’s downstream skill; no score or report fabricated | Build skill contract forbids invoking the separate Verify skill during Build | DEGRADED | Conductor must run milestone Verify before Design Forge |
+
+### Verification Results
+
+| Step | Command | Expected | Actual | Pass? |
+|---|---|---|---|:---:|
+| 1.1 | `rg -n "exploitability|portfolio safe|candidate" docs/DOMAIN-GUIDE.md` | Only explicit forbidden-language explanations | Three explanatory matches, no user-facing claims | YES |
+| 1.2 | `pnpm vitest run tests/domain.test.ts` | Domain tests pass | `Test Files 1 passed`; `Tests 4 passed (4)`; exit 0 | YES |
+| 1.2 | `pnpm typecheck` | Strict typecheck exits 0 | `$ tsc --noEmit`; exit 0 | YES |
+| 1.3 | `docker compose build migrate` | Migration image builds | `hack-hydra-migrate Built`; exit 0 | YES |
+| 1.3 | `docker compose up -d postgres` | PostgreSQL healthy | `hack-hydra-postgres-1 Up ... (healthy)`; exit 0 | YES |
+| 1.3 | `docker compose run --rm -e CI=true migrate` | Migration exits 0 | Drizzle pulled schema and printed `[✓] Changes applied`; exit 0 | YES |
+| 1.3 | PostgreSQL table query | All §6.1 tables exist | `advisories audit_events findings incidents jobs phase_events plans portfolios proposed_fixes receipts snapshots source_cache` | YES |
+| 1.4 | `rg -n 'docs/evidence/2026-08-19-pre-forge-runtime.json|expectedLockfileSha256|handleImport' scripts/seed-demo.ts` | All three markers | Lines 16, 22, 28, and 38 present; exit 0 | YES |
+
+### Actual output excerpts
+
+```text
+Test Files  1 passed (1)
+Tests  4 passed (4)
+$ tsc --noEmit
+exit=0
+
+[✓] Pulling schema from database...
+[✓] Changes applied
+
+advisories
+audit_events
+findings
+incidents
+jobs
+phase_events
+plans
+portfolios
+proposed_fixes
+receipts
+snapshots
+source_cache
+```
+
+### Phase 1 disposition
+
+Tasks 1.1 through 1.4 passed independently. Task 1.5 is explicitly deferred to the conductor’s `verify_milestone` phase, which must produce the milestone score before Design Forge. No `VERIFY-REPORT.md` or score was fabricated during Build.

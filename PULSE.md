@@ -274,7 +274,7 @@
 
 ---
 ### build: 2026-08-20T02:38:00Z
-**Status:** COMPLETE
+**Status:** PARTIAL
 **Session(s):** 1
 
 #### Done
@@ -288,6 +288,7 @@
 
 #### Blockers for Downstream
 - Full amd64 application/runtime image build remains open until Phase 1 creates source files.
+- Build continues through internal PLAN Phase 6; milestone Verify is deferred to the conductor’s downstream `verify_milestone` phase.
 
 #### For Next Skill
 - Debug must prioritize the three Build deviations and revalidate the private HydraDB runtime before higher-level tests.
