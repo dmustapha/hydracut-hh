@@ -43,7 +43,7 @@
     "copilot_pat_available": false
   },
   "pipeline": {
-    "current_phase": "build",
+    "current_phase": "debug",
     "project_name": "hydracut",
     "phases": {
       "intel": {
@@ -72,9 +72,9 @@
         "completed_at": "2026-08-20T02:04:56Z"
       },
       "build": {
-        "status": "running",
+        "status": "complete_with_blockers",
         "dispatched_at": "2026-08-20T02:21:47Z",
-        "completed_at": null
+        "completed_at": "2026-08-20T06:10:00Z"
       },
       "debug": {
         "status": "pending",
@@ -177,6 +177,11 @@
     "url_preverify": {
       "evidence": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/docs/evidence/url-preverify-2026-08-20.md",
       "zero_cost_preflight": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/docs/evidence/zero-cost-deployment-preflight.md"
+    },
+    "build": {
+      "report": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/BUILD-REPORT.md",
+      "state": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.build-state.json",
+      "pulse": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/PULSE.md"
     }
   },
   "intelState": {
@@ -218,7 +223,14 @@
     "elevation_count": 4,
     "approved_count": 2
   },
-  "buildState": null,
+  "buildState": {
+    "status": "complete_with_blockers",
+    "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.build-state.json",
+    "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/BUILD-REPORT.md",
+    "completed_internal_phases": 7,
+    "blockers": ["BLK-EXT-001", "DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-021", "DEV-022"],
+    "summary": "Local Build implementation and packaging complete; authentic corpus, full browser rehearsal, persistent VM deployment, and fresh final evidence remain externally/runtime gated."
+  },
   "debugState": null,
   "wireState": null,
   "verifyMilestoneState": null,
