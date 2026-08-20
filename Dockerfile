@@ -12,9 +12,11 @@ RUN pnpm typecheck && pnpm test && pnpm build
 
 FROM dependencies AS tooling
 COPY --chown=node:node . .
+RUN chown -R node:node /app
 
 FROM tooling AS worker
 RUN pnpm typecheck && pnpm test
+RUN chown -R node:node /app
 USER node
 CMD ["pnpm", "worker"]
 
