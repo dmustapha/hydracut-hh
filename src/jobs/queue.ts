@@ -15,12 +15,20 @@ if (!connectionString) throw new Error("DATABASE_URL_REQUIRED");
 export const boss = new PgBoss({ connectionString, application_name: "hydracut-worker" });
 boss.on("error", (error) => process.stderr.write(`${JSON.stringify({ level: "error", error })}\n`));
 
-export async function startQueue(): Promise<void> {
+let queueStart: Promise<void> | undefined;
+
+async function initializeQueue(): Promise<void> {
   await boss.start();
   for (const name of queueNames) await boss.createQueue(name);
 }
 
+export function startQueue(): Promise<void> {
+  queueStart ??= initializeQueue();
+  return queueStart;
+}
+
 export async function enqueue<T extends object>(name: QueueName, data: T, idempotencyKey?: string): Promise<string> {
+  await startQueue();
   const stableKey = idempotencyKey ?? randomUUID();
   const jobId = canonicalDigest({ name, stableKey });
   const inputDigest = canonicalDigest(data);

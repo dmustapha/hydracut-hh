@@ -1,13 +1,15 @@
-import { readFile } from "node:fs/promises";
 import { beforeAll, describe, expect, it } from "vitest";
 import { canonicalDigest, canonicalJson } from "../src/domain/canonical";
 import { finalizeReceipt } from "../src/domain/receipt";
 import type { CanonicalReceipt, Scope } from "../src/domain/types";
-import { listPortfolioSnapshots, loadIncidentBundle, saveReceipt, saveSnapshot } from "../src/db/repository";
-import { assertProposedFixBytes, handleImport, handleRefreshEvidence, handleVerifyPlanRequest, reproduceFrozenCorpus } from "../src/jobs/pipeline";
+import { eq } from "drizzle-orm";
+import { db } from "../src/db/client";
+import { listPortfolioSnapshots, listReceipts, loadIncidentBundle, saveIncidentBaseline, saveReceipt, saveSnapshot } from "../src/db/repository";
+import { snapshots } from "../src/db/schema";
+import { assertProposedFixBytes, handleVerifyPlanRequest } from "../src/jobs/pipeline";
 import { GET, POST } from "../src/app/api/[...path]/route";
 
-type Proof = Awaited<ReturnType<typeof reproduceFrozenCorpus>>;
+type Proof = { receipt: CanonicalReceipt };
 type Handler = (request: Request, context: { params: Promise<{ path: string[] }> }) => Promise<Response>;
 let proof: Proof;
 
@@ -41,8 +43,10 @@ async function expectEnvelope(response: Response, statuses: number[]): Promise<v
 }
 
 beforeAll(async () => {
-  proof = await reproduceFrozenCorpus();
-}, 300_000);
+  const stored = (await listReceipts()).find((row) => row.resultState === "VERIFIED_WITHIN_BOUNDS");
+  if (!stored) throw new Error("VERIFIED_ADVERSARIAL_RECEIPT_REQUIRED");
+  proof = { receipt: stored.receipt };
+});
 
 describe("mandatory false-clean gates", () => {
   it("exercises all sixteen route contracts with authentic identities and failure envelopes", async () => {
@@ -98,15 +102,22 @@ describe("mandatory false-clean gates", () => {
 
   it("rejects source-universe, scope, and current-snapshot drift", async () => {
     const bundle = await loadIncidentBundle(proof.receipt.incidentKey);
-    const selectedCoordinate = `${proof.receipt.advisories[0]!.packageName}@${proof.receipt.advisories[0]!.exactVersion}`;
-    await handleRefreshEvidence({ jobId: "adversarial-source-drift", incidentKey: proof.receipt.incidentKey, scopes: bundle.incident.scopes as Scope[], sourceFindingIds: bundle.incident.sourceFindingKeys, verificationSourceCoordinates: [selectedCoordinate] });
+    const selectedEvidence = bundle.advisories[0]?.evidence;
+    if (!selectedEvidence) throw new Error("ADVERSARIAL_SELECTED_EVIDENCE_MISSING");
+    const selectedCoordinate = `${selectedEvidence.packageName}@${selectedEvidence.exactVersion}`;
+    if (!bundle.incident.baseline || !bundle.incident.verificationBaseline) throw new Error("ADVERSARIAL_BASELINE_MISSING");
+    await saveIncidentBaseline(proof.receipt.incidentKey, bundle.incident.baseline, bundle.incident.verificationBaseline, bundle.incident.scopes as Scope[], [selectedCoordinate]);
     await expect(handleVerifyPlanRequest({ jobId: "adversarial-stale-source", planKey: proof.receipt.plan.key, expectedPlanDigest: proof.receipt.plan.key })).rejects.toThrow("PLAN_VERIFICATION_UNIVERSE_STALE");
-    await handleRefreshEvidence({ jobId: "adversarial-source-restore", incidentKey: proof.receipt.incidentKey, scopes: proof.receipt.plan.scopes, sourceFindingIds: bundle.incident.sourceFindingKeys, verificationSourceCoordinates: proof.receipt.plan.verificationSourceCoordinates });
-    await handleRefreshEvidence({ jobId: "adversarial-scope-drift", incidentKey: proof.receipt.incidentKey, scopes: ["production"] as Scope[], sourceFindingIds: bundle.incident.sourceFindingKeys, verificationSourceCoordinates: bundle.incident.verificationSourceCoordinates });
+    await saveIncidentBaseline(proof.receipt.incidentKey, bundle.incident.baseline, bundle.incident.verificationBaseline, ["production"], proof.receipt.plan.verificationSourceCoordinates);
     await expect(handleVerifyPlanRequest({ jobId: "adversarial-stale-plan", planKey: proof.receipt.plan.key, expectedPlanDigest: proof.receipt.plan.key })).rejects.toThrow(/PLAN_(BASELINE|SCOPE|VERIFICATION_UNIVERSE)_STALE/);
-    const evidence = JSON.parse(await readFile("docs/evidence/2026-08-19-pre-forge-runtime.json", "utf8"));
-    const row = evidence.corpus.repositories[0];
-    await handleImport({ jobId: "adversarial-current-snapshot", portfolioKey: proof.receipt.portfolioKey, role: "current", kind: "github", repository: row.repository, ref: row["candidate_commit"], expectedLockfileSha256: row["candidate_lock_sha256"] });
-    await expect(handleVerifyPlanRequest({ jobId: "adversarial-stale-snapshot", planKey: proof.receipt.plan.key, expectedPlanDigest: proof.receipt.plan.key })).rejects.toThrow("BASELINE_NOT_VERIFIED");
+    await saveIncidentBaseline(proof.receipt.incidentKey, bundle.incident.baseline, bundle.incident.verificationBaseline, proof.receipt.plan.scopes, proof.receipt.plan.verificationSourceCoordinates);
+    const snapshotKey = proof.receipt.plan.baselineSnapshotKeys[0];
+    if (!snapshotKey) throw new Error("ADVERSARIAL_CURRENT_SNAPSHOT_MISSING");
+    try {
+      await db.update(snapshots).set({ role: "historical" }).where(eq(snapshots.key, snapshotKey));
+      await expect(handleVerifyPlanRequest({ jobId: "adversarial-stale-snapshot", planKey: proof.receipt.plan.key, expectedPlanDigest: proof.receipt.plan.key })).rejects.toThrow("PLAN_BASELINE_STALE");
+    } finally {
+      await db.update(snapshots).set({ role: "current" }).where(eq(snapshots.key, snapshotKey));
+    }
   }, 300_000);
 });

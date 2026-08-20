@@ -249,11 +249,11 @@ Implementation tasks 3.1–3.3 and the authenticated corpus gate are complete. T
 | `pnpm typecheck` | PASS |
 | 15 dispatcher-row assertion | PASS |
 | `pnpm build` with local secret files | PASS |
-| Standalone E2E | BLOCKED by host database wiring; Compose profile remains required |
+| Production-bundle E2E | PASS through the Compose browser profile: all 18 tests completed with exit 0; the one retried mobile F01 was rerun alone with retries disabled and passed in 39.0s |
 
 ### Phase 4 disposition
 
-Tasks 4.1–4.5 are implemented and compile/build successfully. Browser proof remains runtime-gated; no screenshots or authentic happy-path claims are credited until the migrated Compose stack runs the suite.
+Tasks 4.1–4.5 are implemented and verified through the migrated Compose stack. The browser suite now consumes an existing verified receipt instead of duplicating the authenticated corpus proof, runs serially within the 4 GB local budget, and preserves desktop/mobile screenshots under `docs/evidence/screenshots/`.
 
 ## Phase 5: Adversarial hardening and rehearsal
 
@@ -272,11 +272,13 @@ Tasks 4.1–4.5 are implemented and compile/build successfully. Browser proof re
 | Secret scan | PASS |
 | `docker compose port hydradb 8443` | No host binding |
 | Authenticated corpus proof runtime | PASS on isolated clean Compose volumes; fresh receipt/SARIF generated |
-| Adversarial/browser/rehearsal runtime | BLOCKED/UNTESTED by standalone runner and browser runtime wiring; no pass fabricated |
+| Adversarial integration | PASS (4/4 in 4.52s on isolated Compose volumes) |
+| Browser runtime | PASS (18 completed with exit 0; F06 combined native proof independently passed in 44.2s) |
+| Formal timed rehearsal | Deferred to the downstream Demo Rehearsal phase after Deploy/Livetest/Interrogate; the 2:52 script is ready but no live take is claimed |
 
 ### Phase 5 disposition
 
-Hardening artifacts and the authenticated proof are complete. The full adversarial matrix and timed browser rehearsal remain runtime-gated and must be rerun through the corrected Compose test runner before final package/preflight.
+Hardening, browser execution, and the adversarial matrix are complete. The API now catches asynchronous handler validation failures, queue producers initialize pg-boss before enqueueing, scenario writes clean exact retry keys before and after attempts, and the incident queue uses bounded bulk reads. Formal live rehearsal remains a downstream gate, not a Build blocker.
 
 ## Phase 6: Deployment and final evidence preparation
 
@@ -293,4 +295,4 @@ Hardening artifacts and the authenticated proof are complete. The full adversari
 
 ### Phase 6 disposition
 
-Local packaging and fresh proof artifacts are prepared. Deployment, restart proof, live tests, browser rehearsal, and final preflight remain pending the external VM and runtime/browser checkpoint.
+Local packaging, fresh proof artifacts, browser execution, and adversarial evidence are prepared. Deployment, restart proof, live tests, formal browser rehearsal, and final preflight remain pending the external VM and their downstream conductor phases.

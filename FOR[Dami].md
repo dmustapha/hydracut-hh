@@ -92,3 +92,11 @@ Forge specifies the system; it does not claim that the unbuilt application alrea
 Forge is complete at **94/100**, with **92/100 winner readiness** and no critical gate failure. The independent audit passed Architecture 10/10, Plan 7/7, and cross-document consistency 9/9.
 
 The important distinction is that this is a blueprint victory, not a runtime victory. The design now closes the ways HydraCut could accidentally look successful—stale evidence, incomplete paths, hidden proof fixtures, removed packages, mismatched scopes, mutated lockfiles, or an unavailable graph. Build must now make each authored contract executable in order, beginning with pinned compatibility and the native HydraDB round trip.
+
+## What the local gate repair proved
+
+Browser tests now reuse a verified receipt instead of rerunning live GitHub/OSV acquisition for every browser project. That separates evidence acquisition from UI verification: the corpus gate proves the data, while Playwright proves that the product presents and acts on it correctly.
+
+The API dispatcher now awaits route handlers inside its error boundary, so asynchronous Zod failures become explicit fail-closed response envelopes. The queue producer starts pg-boss before sending a job, and scenario writes clean their exact retry key both before and after execution. Together these changes make retries deterministic without weakening any proof requirement.
+
+The remaining `DEP-001` item is infrastructure, not a local test failure: the final stack still needs a persistent zero-cost VM before Deploy and formal live rehearsal.

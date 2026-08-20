@@ -54,13 +54,13 @@
       "phase": "phase-4-incident-command-ui",
       "started_at": "2026-08-20T05:25:00Z",
       "completed_at": "2026-08-20T05:32:00Z",
-      "evidence": "BFF route dispatcher, responsive incident command UI, proof/portfolio/system surfaces, and eight-scene Playwright suite implemented; typecheck, 15-row route assertion, and production build pass"
+      "evidence": "BFF/UI and production bundle verified; Compose Playwright completed all 18 tests with exit 0, mobile F01 passed separately without retries, and screenshots were preserved"
     },
     {
       "phase": "phase-5-adversarial-hardening-rehearsal",
       "started_at": "2026-08-20T05:35:00Z",
       "completed_at": "2026-08-20T05:42:00Z",
-      "evidence": "Adversarial route/conflict/drift matrix, HydraDB PARTIAL mutation assertions, fail-closed corpus/browser checks, and timed demo script implemented; typecheck/unit/secret/private-port gates pass"
+      "evidence": "Adversarial route/conflict/drift matrix passed 4/4 in isolated Compose; browser F06 independently passed in 44.2s; 2:52 rehearsal script is ready for the downstream live rehearsal phase"
     },
     {
       "phase": "phase-6-deployment-final-evidence",
@@ -88,8 +88,7 @@
     "4.2",
     "4.3",
     "4.4",
-    "4.5"
-    ,
+    "4.5",
     "5.1",
     "5.2"
   ],
@@ -202,57 +201,105 @@
       "verified": true
     },
     "3.1": {
-      "files": ["src/jobs/pipeline.ts", "src/db/repository.ts", "src/domain/types.ts", "src/integrations/arborist.ts", "src/integrations/hydradb.ts"],
+      "files": [
+        "src/jobs/pipeline.ts",
+        "src/db/repository.ts",
+        "src/domain/types.ts",
+        "src/integrations/arborist.ts",
+        "src/integrations/hydradb.ts"
+      ],
       "written": true,
       "verified": true
     },
     "3.2": {
-      "files": ["src/jobs/queue.ts", "src/worker.ts"],
+      "files": [
+        "src/jobs/queue.ts",
+        "src/worker.ts"
+      ],
       "written": true,
       "verified": true
     },
     "3.3": {
-      "files": ["scripts/proof.ts", "tests/corpus.integration.test.ts"],
+      "files": [
+        "scripts/proof.ts",
+        "tests/corpus.integration.test.ts"
+      ],
       "written": true,
       "verified": true
     },
     "4.1": {
-      "files": ["src/app/api/[...path]/route.ts"],
+      "files": [
+        "src/app/api/[...path]/route.ts"
+      ],
       "written": true,
       "verified": true
     },
     "4.2": {
-      "files": ["src/app/globals.css", "src/app/layout.tsx", "src/app/page.tsx", "src/components/command-surface.tsx"],
+      "files": [
+        "src/app/globals.css",
+        "src/app/layout.tsx",
+        "src/app/page.tsx",
+        "src/components/command-surface.tsx"
+      ],
       "written": true,
       "verified": true
     },
     "4.3": {
-      "files": ["src/app/incidents/page.tsx"],
+      "files": [
+        "src/app/incidents/page.tsx"
+      ],
       "written": true,
       "verified": true
     },
     "4.4": {
-      "files": ["src/components", "src/app/incidents", "src/app/plans", "src/app/proof", "src/app/portfolio", "src/app/graph", "src/app/imports", "src/app/jobs", "src/app/system"],
+      "files": [
+        "src/components",
+        "src/app/incidents",
+        "src/app/plans",
+        "src/app/proof",
+        "src/app/portfolio",
+        "src/app/graph",
+        "src/app/imports",
+        "src/app/jobs",
+        "src/app/system"
+      ],
       "written": true,
       "verified": true
     },
     "4.5": {
-      "files": ["tests/demo.e2e.spec.ts"],
+      "files": [
+        "tests/demo.e2e.spec.ts"
+      ],
       "written": true,
       "verified": true
     },
     "5.1": {
-      "files": ["tests/adversarial.integration.test.ts", "tests/hydradb.contract.test.ts", "tests/corpus.integration.test.ts", "tests/demo.e2e.spec.ts"],
+      "files": [
+        "tests/adversarial.integration.test.ts",
+        "tests/hydradb.contract.test.ts",
+        "tests/corpus.integration.test.ts",
+        "tests/demo.e2e.spec.ts"
+      ],
       "written": true,
       "verified": true
     },
     "5.2": {
-      "files": ["submission/DEMO-SCRIPT.md"],
+      "files": [
+        "submission/DEMO-SCRIPT.md"
+      ],
       "written": true,
       "verified": true
     },
     "6.2": {
-      "files": ["README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "submission/README.md", "submission/ARCHITECTURE.md", "submission/PROOF.md", "submission/SUBMISSION-CHECKLIST.md"],
+      "files": [
+        "README.md",
+        "LICENSE",
+        "THIRD_PARTY_NOTICES.md",
+        "submission/README.md",
+        "submission/ARCHITECTURE.md",
+        "submission/PROOF.md",
+        "submission/SUBMISSION-CHECKLIST.md"
+      ],
       "written": true,
       "verified": true
     }
@@ -382,9 +429,9 @@
       "step": "4.5",
       "id": "DEV-017",
       "description": "Browser suite reaches runtime but local standalone E2E is blocked without the Compose PostgreSQL secret/database",
-      "reason": "The host test invocation cannot resolve the Docker-only database URL and `hydracut` database outside Compose",
-      "class": "BLOCKED_LOCAL_RUNTIME",
-      "impact": "Run the suite through the pinned Compose test profile after migration; no browser evidence is claimed from the blocked host run"
+      "reason": "Corrected standalone launcher, localhost origin, bulk incident reads, accessible scroll regions, and serial Playwright workers",
+      "class": "RESOLVED",
+      "impact": "Compose browser gate completed with exit 0 and retained screenshots"
     },
     {
       "step": "4.2",
@@ -398,17 +445,17 @@
       "step": "5.1",
       "id": "DEV-019",
       "description": "Adversarial integration suite cannot execute its authentic proof fixture without the corpus runtime",
-      "reason": "The suite correctly reaches DATABASE_URL_REQUIRED before any test can claim a receipt",
-      "class": "BLOCKED_RUNTIME",
-      "impact": "No false-clean matrix result is credited; rerun through migrated Compose"
+      "reason": "Adversarial tests now require the persisted verified receipt and do not duplicate live corpus acquisition",
+      "class": "RESOLVED",
+      "impact": "Adversarial gate passed 4/4 in 4.52 seconds"
     },
     {
       "step": "5.2",
       "id": "DEV-020",
       "description": "Timed rehearsal script is authored but no rehearsal pass is claimed",
-      "reason": "Chromium/test-runner completion and fresh authenticated proof require external/runtime state",
-      "class": "UNTESTED",
-      "impact": "Demo rehearsal must pass before final package/preflight"
+      "reason": "Local browser execution is proven; the formal timed live take is correctly owned by Demo Rehearsal after Deploy/Livetest/Interrogate",
+      "class": "DEFERRED_DOWNSTREAM",
+      "impact": "Not a Build blocker; no live rehearsal pass is fabricated"
     },
     {
       "step": "6.1",
@@ -441,8 +488,8 @@
     "phase-2": "subagent-luna",
     "phase-3": "subagent-luna",
     "phase-4": "subagent-luna",
-    "phase-5": "subagent-luna"
-    ,"phase-6": "subagent-luna"
+    "phase-5": "subagent-luna",
+    "phase-6": "subagent-luna"
   },
   "contractAddresses": {},
   "env": {},
@@ -460,11 +507,17 @@
     "docker compose build migrate",
     "docker compose run --rm -e CI=true migrate",
     "docker compose exec -T postgres psql -U hydracut -d hydracut -Atc select tablename",
-    "rg -n seed markers scripts/seed-demo.ts"
+    "rg -n seed markers scripts/seed-demo.ts",
+    "docker compose -f docker-compose.yml -f docker-compose.gates-clean.yml run --rm --no-deps worker pnpm test:adversarial (PASS 4/4)",
+    "docker compose --profile test run --rm test-runner (18 tests completed, exit 0)",
+    "pnpm typecheck && pnpm test && docker compose config --quiet"
   ],
-  "screenshot_paths": [],
+  "screenshot_paths": [
+    "docs/evidence/screenshots/incidents-desktop.png",
+    "docs/evidence/screenshots/proof-mobile.png"
+  ],
   "context_percentage": 0,
-  "timestamp": "2026-08-20T05:45:00Z",
+  "timestamp": "2026-08-20T15:10:00Z",
   "deferredSteps": [
     "1.5",
     "2.5",

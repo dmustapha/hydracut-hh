@@ -223,7 +223,7 @@ async function dispatch(request: Request, context: Context): Promise<Response> {
     const key = segments.join("/");
     if (request.method === "POST" && !allowMutation(request)) return failure("RATE_LIMITED", "ERROR", "Mutation rate limit exceeded.", 429, requestId, true, { limit: 10, windowSeconds: 60 }, { "retry-after": "60" });
     const route = routes.find((item) => item.method === request.method && item.pattern.test(key));
-    return route ? route.handle(request, segments, requestId) : failure("NOT_FOUND", "ERROR", "Route not found.", 404, requestId);
+    return route ? await route.handle(request, segments, requestId) : failure("NOT_FOUND", "ERROR", "Route not found.", 404, requestId);
   } catch (error) {
     const invalid = error instanceof z.ZodError;
     const code = error instanceof Error ? error.message : "INTERNAL_ERROR";

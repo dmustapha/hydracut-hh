@@ -362,3 +362,66 @@
 > so whats the fix. reauthentication?
 
 **Action:** Explained that GitHub reauthentication was not required; the keyring token was valid, the Compose secret was empty, and the actual runtime fix was increasing external-source header timeouts before rerunning proof.
+
+### Prompt 52
+> lets do the other gates(are they part of the blockers)
+
+**Action:** Confirmed the browser/adversarial runtime items were local blockers while `DEP-001` is external; repaired standalone startup, API/queue/error handling, incident-query fanout, accessibility, and retry cleanup, then proved the browser and adversarial gates locally while leaving formal live rehearsal in its downstream conductor phase.
+
+### Prompt 53
+> get me the submission link so i can check how many hrs left
+
+**Action:** Provided the official Google submission form and calculated the remaining time to the 2026-08-20 23:59 PT deadline.
+
+### Prompt 54
+> its pt not pdt, for the timezone
+
+**Action:** Corrected the user-facing deadline label to the organizer's `PT` wording while preserving the UTC-7 August countdown calculation.
+
+### Prompt 55
+> lets continue with design forge in a new chat. use /handoff
+
+**Action:** Created a comprehensive `/handoff` with the conductor positioned at the mandatory Design Forge identity checkpoint, preserved all verified gate evidence and the remaining Deploy-owned VM prerequisite, and supplied an exact resume prompt for the new chat.
+
+### Prompt 56
+> Resume the Hack Hydra conductor pipeline for HydraCut at:
+> /Users/MAC/hackathon-toolkit/candidates/hack-hydra
+>
+> Read this handoff completely first:
+> /Users/MAC/hackathon-toolkit/candidates/hack-hydra/docs/context/conversation_2026-08-20_1623-design-forge-handoff.md
+>
+> Then read the active Hack Hydra brief, hackathon-conductor/SKILL.md, design-forge/SKILL.md, PIPELINE-COMMON.md, PULSE-PROTOCOL.md, .conductor-state.json, and .conductor-resume.md. Follow the conductor and do not invoke Design Forge outside it.
+>
+> Exact first action after reading: inspect the dirty Git working tree without changing it, run the conductor FSM or resume pre-gate, and confirm it returns the mandatory design_handoff checkpoint for design_forge. Present the six required questions: one-sentence world or visual identity, accent color, background atmosphere, typography domain, at least three real reference URLs, and explicit rejection list. Do not invent answers or dispatch Design Forge until the user answers.
+>
+> Intel, Warroom, Forge, Critique, URL preverification, Build, Debug, Wire, and milestone Verify are complete. Do not redispatch them. Local proof blockers are resolved: the verified receipt digest is 250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804, the production browser gate reached exit 0 across 18 tests with targeted no-retry mobile confirmation, F06 passed independently, and adversarial integration passed 4/4. The verified remediation working tree is not yet committed, so preserve it and create a safe local checkpoint commit before broad design edits.
+>
+> The only external blocker is PULSE item DEP-001 before Deploy: a persistent zero-cost cloud VM independent of the local Mac. Preferred target is Oracle Always Free VM.Standard.A1.Flex with 2 OCPUs, 12 GB RAM, Ubuntu ARM64. Local Docker and Quick Tunnel are not the final deployment. Missing VM public IP, SSH username, and ACME email may be recorded at Deploy for the user to resolve.
+>
+> Canonical slug is hydracut-hh. Public repository target is https://github.com/dmustapha/hydracut-hh. Official submission form is https://forms.gle/WEwqEmmN7Bkp4HyJ6. Use the organizer's PT label. Hard deadline is 2026-08-20 23:59 PT, with a target submission 60 to 90 minutes early.
+>
+> Non-negotiables: HydraCut powered by CampaignRadius; complete approved Forge scope; self-hosted HydraDB OSS; explicit OpenCypher; native algo.MSpaths for baseline and final combined proof; authentic immutable repository, advisory, and proposed-fix evidence; coverage planning plus one combined final proof; no fabricated evidence, hosted-only computation, embeddings, vectors, LLM decision path, false-clean fallback, or universal safety claims; public GitHub; demo no longer than three minutes; README HydraDB explanation; setup, license, attribution, and Google Form.
+>
+> After the checkpoint answers, continue autonomously through Design Forge and all downstream conductor phases. Pause only at mandatory conductor checkpoints, missing external credentials at Deploy, destructive or external authorization boundaries, or a genuine blocker.
+
+**Action:** Read the complete handoff and all governing conductor, Design Forge, brief, PULSE, state, resume, and checkpoint files; preserved the dirty tree; confirmed `git diff --check`; and confirmed the FSM returned the mandatory `design_handoff` checkpoint for `design_forge` without dispatching it.
+
+### Prompt 57
+> visual identity\
+
+**Action:** Held at the mandatory Design Forge identity checkpoint and awaited the user's complete six-field response.
+
+### Prompt 58
+> visual identity\
+> go with the best theme for the app, not generic ai colors(like purple, dont use)
+> pick the best
+> dont use generic font
+> do research yourself on similar
+> none
+
+**Action:** Treated the response as delegated authority to research and select the strongest identity, accent, background, typography, and real reference products while rejecting purple AI-gradient styling and generic fonts.
+
+### Prompt 59
+> and the designs must be high grade and deep, with all the pages and designs properly outlined. formatting(text,images), containers and boxes, well aligned with the texts and animations. all high grade. with all the necessary pages and features and flow and progression of the app all accounted for. take your time.
+
+**Action:** Elevated the Design Forge contract to a production-grade route-complete system, researched comparable graph, security, incident, and developer-infrastructure products, selected the forensic graph atlas direction, and documented every route, workflow, component, data format, responsive state, and purposeful motion requirement before implementation.

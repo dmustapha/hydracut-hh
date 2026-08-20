@@ -12,6 +12,7 @@
 - [SKILL] Verified real corpus returns 9 pairs for 3 advisory-backed sources against 3 applications, 6 pairs in the proposed-fix portfolio, and 0 residual pairs for the specifically selected minimist incident after all 3 authentic proposed fixes.
 - [SKILL] Verified thin scenario projections reuse immutable commit graphs and add only scenario targets, incident anchors, and selection edges; all 8 combinations preserved the expected residual sequence.
 - [SKILL] Critique corrected submission classification: HydraCut enters Track 02-A; Best Use of HydraDB is a separate award, not a project track.
+- [USER] Design Forge is Tier A and route-complete: forensic graph atlas, signal vermilion `#F15A3C`, warm graphite drafting surfaces, IBM Plex family, real graph evidence, and no purple AI aesthetic.
 
 ## Decisions Log
 - [CLAUDE 08-18] Intel complete (maximal depth). Recommending Track 2A supply-chain blast radius. Awaiting Dami lock before warroom.
@@ -32,6 +33,8 @@
 - [SKILL 08-20] Phase 0 runtime evidence is accepted with explicit DEV-001 esbuild lifecycle approval, DEV-002 non-root volume initialization, and DEV-003 deferred full application image build.
 - [SKILL 08-20] Phase 0 proved the pinned HydraDB digest on ARM64, private Compose networking, healthy PostgreSQL, exact pnpm dependencies, and TypeScript 7.0.2.
 - [SKILL 08-20] HydraDB requires image-owned `/tmp/graph` initialization under UID/GID 10001; the Compose wrapper is now part of the runtime contract.
+- [USER 08-20] Design must cover every route, approved feature, workflow transition, text and data format, container, responsive state, and purposeful animation at production quality.
+- [USER 08-20] Delegated visual reference research and final theme selection to Codex while rejecting purple AI gradients and generic typography.
 
 ## Blockers
 - none
@@ -439,3 +442,53 @@
 
 #### For Next Skill
 - Design Forge remains at the mandatory identity checkpoint. After that, continue local stress/polish; do not Deploy until the VM exists.
+
+---
+### debug: 2026-08-20T15:10:00Z
+**Status:** COMPLETE
+**Session(s):** 2 (runtime-gate remediation)
+
+#### Done
+- Cleared the Compose browser gate: the production bundle completed all 18 Playwright tests with exit 0; the one retried mobile F01 passed separately with retries disabled, and the combined native F06 proof passed independently in 44.2 seconds.
+- Cleared the isolated adversarial gate 4/4 in 4.52 seconds without duplicating live corpus acquisition.
+- Fixed awaited API error envelopes, pg-boss producer startup, bounded incident bulk reads, standalone startup/origin wiring, accessible scroll regions, serial browser execution, and exact scenario retry cleanup.
+- Reconfirmed typecheck, unit 4/4, Compose configurations, clean-volume HydraDB contract 4/4, and immutable screenshot evidence.
+
+#### Remaining blocker
+- `DEP-001` only: persistent zero-cost VM provisioning belongs to Deploy. Formal live rehearsal remains pending by conductor order after Deploy/Livetest/Interrogate and is not claimed locally.
+
+#### For Next Skill
+- Resume the conductor at the mandatory Design Forge identity checkpoint; do not redispatch completed Build, Debug, Wire, or milestone Verify phases.
+
+---
+### design_handoff: 2026-08-20T15:50:32Z
+**Status:** COMPLETE
+**Session(s):** 1 conductor checkpoint
+
+#### Done
+- Researched official graph, security, incident, observability, and developer-tool interfaces.
+- Selected Tier A forensic graph atlas and recorded all six mandatory identity fields.
+- Outlined every HydraCut route, workflow stage, component system, responsive state, and motion rule.
+
+#### Additions (not in PRD/Architecture)
+- [USER] [NEW] Production-grade route-complete visual system required across the complete approved product.
+
+#### Deviations
+- [USER] Delegated the checkpoint's visual choices and reference research to Codex instead of supplying fixed URLs or colors.
+
+#### Verified Facts
+- [VF-DH1] The existing app has fourteen user-facing route surfaces plus shared command, impact, fix, and receipt components. Source: `src/app` and `src/components` route inventory.
+- [VF-DH2] Current desktop and mobile screenshots show shallow hierarchy and mobile digest overflow, requiring a full system pass. Source: existing evidence screenshots.
+
+#### Assumptions
+- None. Tier, identity, color, background, typography, references, and rejection list are recorded in `DESIGN_BRIEF.md`.
+
+#### Blockers for Downstream
+- None for Design Forge. `DEP-001` remains Deploy-owned.
+
+#### Key Decisions
+- [USER] [D-DH1] Use the forensic graph atlas: it makes native traversal evidence the hero while preserving operational and audit clarity.
+- [USER] [D-DH2] No route may remain shallow, visually unfinished, or disconnected from the full import-to-receipt progression.
+
+#### For Next Skill
+- Design Forge must implement `DESIGN_BRIEF.md` and the route-complete plan, then prove every page at desktop and mobile.

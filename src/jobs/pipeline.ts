@@ -165,9 +165,10 @@ async function traverseSnapshotSet(input: { scenarioKey: string; portfolioSelect
   snapshots: Array<{ key: string; repository: string; topology: ExtractedSnapshot }>; sources: ScenarioSource[]; scopes: Scope[] }): Promise<CanonicalReceipt["baseline"]> {
   const boundSources = bindSources(input.sources, input.snapshots);
   const pairKeys = bfsPairKeys(input.snapshots, boundSources, input.scopes);
-  await writeScenario({ scenarioKey: input.scenarioKey, portfolioKey: input.portfolioSelector,
-    applications: input.snapshots.map((row) => ({ applicationKey: row.repository, snapshotKey: row.key })), sources: boundSources });
   try {
+    await cleanupScenario(input.scenarioKey);
+    await writeScenario({ scenarioKey: input.scenarioKey, portfolioKey: input.portfolioSelector,
+      applications: input.snapshots.map((row) => ({ applicationKey: row.repository, snapshotKey: row.key })), sources: boundSources });
     return await runTraversal(traversalBounds({ sourceSelectors: boundSources.map(({ selector }) => selector), targetSelector: input.portfolioSelector,
       scopes: input.scopes, maxImportedDepth: Math.max(...input.snapshots.map(({ topology }) => topology.maxDepth)),
       targetCount: input.snapshots.length, expectedPairKeyDigest: canonicalDigest(pairKeys) }));
@@ -293,8 +294,9 @@ export async function handleDiscoverProposedFixes(incidentKey: string) {
 }
 
 export async function handleVerifyPlan(payload: VerifyPayload): Promise<{ digest: string }> {
-  await writeScenario({ scenarioKey: payload.scenarioKey, portfolioKey: payload.portfolioSelector, applications: payload.applications, sources: payload.sources });
   try {
+    await cleanupScenario(payload.scenarioKey);
+    await writeScenario({ scenarioKey: payload.scenarioKey, portfolioKey: payload.portfolioSelector, applications: payload.applications, sources: payload.sources });
     await phase(payload.jobId, 1, "GRAPH_WRITE", { scenarioKey: payload.scenarioKey });
     const bounds = traversalBounds({ sourceSelectors: payload.sources.map((source) => source.selector), targetSelector: payload.portfolioSelector, scopes: payload.scopes, maxImportedDepth: payload.maxImportedDepth, targetCount: payload.applications.length, expectedPairKeyDigest: payload.expectedPairKeyDigest });
     await phase(payload.jobId, 2, "VERIFY_COUNTS", { resultLimit: bounds.resultLimit }); const final = await runTraversal(bounds);

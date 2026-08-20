@@ -241,25 +241,29 @@
     "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.build-state.json",
     "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/BUILD-REPORT.md",
     "completed_internal_phases": 7,
-    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-021"],
-    "summary": "Local Build implementation and authenticated corpus/fresh proof complete; full browser rehearsal and persistent VM deployment remain externally/runtime gated."
+    "blockers": [
+      "DEP-001"
+    ],
+    "summary": "Local Build, authenticated corpus proof, browser execution, and adversarial gates complete; persistent VM remains before Deploy."
   },
   "debugState": {
-    "status": "complete_with_blockers",
+    "status": "complete",
     "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.debug-state.json",
     "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/DEBUG-REPORT.md",
-    "confidenceScore": 61,
-    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020"],
-    "summary": "Baseline, HydraDB contract, optional edge, Compose health, migration, static security gates, and authenticated corpus proof pass; browser/adversarial evidence remains blocked or unrecoverable and is not claimed."
+    "confidenceScore": 84,
+    "blockers": [],
+    "summary": "All local Debug gates pass, including production-bundle browser execution and adversarial 4/4; DEP-001 is downstream Deploy work."
   },
   "wireState": {
     "status": "WIRED-WITH-DEGRADATION",
     "connectionsTotal": 11,
-    "connectionsPassed": 7,
+    "connectionsPassed": 8,
     "credentialsResolved": 4,
     "credentialsTotal": 4,
-    "demoFlowTest": "SKIPPED",
-    "blockers": ["DEP-001", "browser-runtime-gated"]
+    "demoFlowTest": "PASS",
+    "blockers": [
+      "DEP-001"
+    ]
   },
   "verifyMilestoneState": {
     "status": "complete",
@@ -267,8 +271,16 @@
     "killZonesTriggered": 2,
     "mode": "milestone",
     "decision": "PROCEED",
-    "kz_warnings": ["demo reliability", "submission completeness"],
-    "conditions": ["persistent Oracle ARM64 VM", "browser runtime rerun"]
+    "kz_warnings": [
+      "demo reliability",
+      "submission completeness"
+    ],
+    "conditions": [
+      "persistent Oracle ARM64 VM"
+    ],
+    "blockers": [
+      "DEP-001"
+    ]
   },
   "verifyPreflightState": null,
   "demoState": null,
@@ -301,9 +313,9 @@
   },
   "dispatch_context": {
     "mode": "resume",
-    "phase": "build",
-    "user_directive": "continue Build in a new chat; handle VPS later",
-    "target_skill": "hackathon-build",
+    "phase": "design_forge",
+    "user_directive": "Tier A forensic graph atlas; full route-complete production-grade design; no purple AI aesthetic or generic fonts",
+    "target_skill": "design-forge",
     "attempt": 1,
     "max_attempts": 3,
     "working_dir": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra"
@@ -349,8 +361,30 @@
       }
     },
     "design_handoff": {
-      "answered": false,
-      "gate": null
+      "answered": true,
+      "answered_at": "2026-08-20T15:50:32Z",
+      "gate": "A",
+      "design_brief_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/DESIGN_BRIEF.md",
+      "answers": {
+        "world_statement": "HydraCut lives in a forensic graph operations room where every dependency path is handled like evidence on a dark drafting table.",
+        "accent_color": "Signal vermilion #F15A3C",
+        "background_treatment": "Warm graphite #0C0E0F with a faint drafting grid, restrained paper grain, layered evidence trays, and data-backed graph linework.",
+        "typography_domain": "Developer infrastructure and security audit: IBM Plex Sans Condensed, IBM Plex Sans, and IBM Plex Mono.",
+        "reference_urls": [
+          "https://www.wiz.io/lp/wiz-security-graph",
+          "https://linear.app/now/how-we-redesigned-the-linear-ui",
+          "https://memgraph.com/lab",
+          "https://incident.io/changelog/upcoming-navigation-changes",
+          "https://grafana.com/developers/saga/about/overview/"
+        ],
+        "rejection_list": [
+          "purple-led palettes and purple-blue AI gradients",
+          "neon cyberpunk, decorative glassmorphism, and glow blobs",
+          "generic Inter, Geist, Arial, or default system typography",
+          "decorative graph nodes or fabricated evidence visuals",
+          "shallow route coverage, misaligned containers, and meaningless motion"
+        ]
+      }
     },
     "demo_rehearsal_blocked": {
       "answered": false

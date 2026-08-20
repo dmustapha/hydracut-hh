@@ -22,7 +22,13 @@ type ProductJob<T> = T & { productJobId: string };
 async function executeJob(productJobId: string, action: () => Promise<void>): Promise<void> {
   await markJobState(productJobId, "RUNNING");
   try { await action(); await markJobState(productJobId, "COMPLETE"); }
-  catch (error) { const match = error instanceof Error ? error.message.match(/^[A-Z][A-Z0-9_]{2,63}/) : null; await markJobState(productJobId, "FAILED", match?.[0] ?? "UNKNOWN_ERROR"); throw error; }
+  catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const match = message.match(/^[A-Z][A-Z0-9_]{2,63}/);
+    await markJobState(productJobId, "FAILED", match?.[0] ?? "UNKNOWN_ERROR");
+    process.stderr.write(`${JSON.stringify({ level: "error", event: "job-failed", productJobId, message })}\n`);
+    throw error;
+  }
 }
 
 async function run(): Promise<void> {

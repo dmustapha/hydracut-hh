@@ -85,7 +85,7 @@ services:
     command: [/bin/sh, -c, 'mkdir -p docs/evidence/screenshots && pnpm build && exec pnpm test:e2e']
     env_file: [.env]
     environment:
-      BASE_URL: http://127.0.0.1:3000
+      BASE_URL: http://localhost:3000
       DATABASE_URL_FILE: /run/secrets/database_url
       HYDRADB_HTTP_URL: http://hydradb:8443
       HYDRADB_GRAPH_NAMESPACE: default

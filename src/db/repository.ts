@@ -284,10 +284,20 @@ export async function loadSystemFacts() {
 
 export async function listIncidentQueue() {
   const rows = await listIncidents();
-  return Promise.all(rows.map(async (incident) => {
-    const bundle = await loadIncidentBundle(incident.key);
-    const evidence = bundle.advisories[0];
-    const fixes = await listProposedFixes(incident.key);
+  const findingKeys = [...new Set(rows.flatMap((incident) => incident.sourceFindingKeys))];
+  const findingRows = await loadFindings(findingKeys);
+  const advisoryKeys = [...new Set(findingRows.map((row) => row.advisoryKey))];
+  const incidentKeys = rows.map((row) => row.key);
+  const [advisoryRows, fixRows] = await Promise.all([
+    advisoryKeys.length ? db.select().from(advisories).where(inArray(advisories.key, advisoryKeys)) : [],
+    incidentKeys.length ? db.select().from(proposedFixes).where(inArray(proposedFixes.incidentKey, incidentKeys)) : [],
+  ]);
+  const findingsByKey = new Map(findingRows.map((row) => [row.key, row]));
+  const advisoriesByKey = new Map(advisoryRows.map((row) => [row.key, row]));
+  return rows.map((incident) => {
+    const finding = incident.sourceFindingKeys.map((key) => findingsByKey.get(key)).find(Boolean);
+    const evidence = finding ? advisoriesByKey.get(finding.advisoryKey) : undefined;
+    const fixes = fixRows.filter((fix) => fix.incidentKey === incident.key);
     return { key: incident.key, portfolioKey: incident.portfolioKey, title: incident.title, packageVersion: evidence ? `${evidence.evidence.packageName}@${evidence.evidence.exactVersion}` : "UNKNOWN",
       kev: evidence?.exploitation.kev ?? "UNKNOWN", epss: evidence?.exploitation.epssProbability ?? "UNKNOWN",
       cvss: evidence?.evidence.cvssVector ?? "UNKNOWN",
@@ -295,7 +305,7 @@ export async function listIncidentQueue() {
       allApplications: new Set(incident.baseline?.pairs.map((pair) => pair.applicationKey) ?? []).size,
       proposedFixes: fixes.filter((fix) => fix.state === "VERIFIED_WITHIN_BOUNDS").length,
       state: incident.state, freshness: evidence?.evidence.source.retrievedAt ?? "UNKNOWN" };
-  }));
+  });
 }
 
 export async function createPlanForIncident(

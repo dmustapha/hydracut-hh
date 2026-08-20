@@ -66,9 +66,26 @@
 - [x] Resume conductor and confirm the FSM dispatches Build
 - [x] Initialize Build state/report with the seven real PLAN phases
 - [x] Dispatch and independently verify Build Phase 0 compatibility/runtime truth
-- [ ] Build the complete approved PLAN in dependency order, beginning with compatibility and native HydraDB
-- [ ] Continue through Debug, Wire, milestone Verify, Design Forge, Stress, Deploy, Livetest, Interrogate, Demo Rehearsal, Demo, Package, and Preflight
+- [x] Build the complete approved PLAN in dependency order, beginning with compatibility and native HydraDB
+- [ ] Continue through Design Forge, Stress, Deploy, Livetest, Interrogate, Demo Rehearsal, Demo, Package, and Preflight (Debug, Wire, and milestone Verify complete)
 - [ ] Submit the public repository, three-minute-or-shorter video, and Google Form 60 to 90 minutes before deadline
+- [x] Save a comprehensive Design Forge `/handoff` with the conductor stopped at the mandatory visual-identity checkpoint
+
+## Design Forge conductor continuation
+
+- [x] Read the full Design Forge handoff and governing conductor, brief, PULSE, and state files
+- [x] Inspect and preserve the verified dirty working tree
+- [x] Confirm the FSM returns the mandatory `design_handoff` checkpoint for `design_forge`
+- [x] Research real security, graph, incident, and developer-infrastructure product references
+- [x] Select the forensic graph atlas identity under the user's delegated design authority
+- [x] Outline every route, feature flow, container system, typography rule, data format, responsive state, and motion rule
+- [ ] Record Tier A and the six identity answers atomically in conductor state and resume beacon
+- [ ] Reconcile the stale conductor lock after verifying no active conductor process exists
+- [ ] Create a safe local checkpoint commit for verified remediation work before broad UI edits
+- [ ] Re-run FSM and Design Forge pre-gate through the conductor
+- [ ] Complete Design Forge across every route with desktop and mobile before and after evidence
+- [ ] Verify feature observables, typecheck, production build, craft audit, accessibility, motion, and responsive behavior
+- [ ] Continue through Stress, Deploy, Livetest, Interrogate, Demo Rehearsal, Demo, Package, and Preflight
 
 ## Build Phase 0 — compatibility and runtime truth
 

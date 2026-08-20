@@ -93,3 +93,13 @@
 - Record the exact external error, missing credential, and rerun action in state and reports.
 - Continue auth-independent implementation and downstream phases without converting partial output into evidence.
 - Reopen the blocked gate only when the external state changes; preserve fail-closed behavior meanwhile.
+## 2026-08-20: Preserve organizer timezone wording
+
+- When the organizer writes `PT`, repeat `PT` in user-facing deadline summaries. It is acceptable to use the active UTC offset for arithmetic, but do not replace the official label with `PDT`.
+
+## 2026-08-20: Design depth means complete product-system coverage
+
+- Do not interpret a design pass as a homepage recolor or token swap when the user asks for high-grade depth.
+- Outline and verify every route, workflow transition, user-facing observable, container, text hierarchy, data format, responsive state, and purposeful animation before implementation is considered complete.
+- Avoid interchangeable AI aesthetics: no purple and blue gradient language, generic typography, decorative graph nodes, or shallow card grids.
+- The graph visualization must carry real HydraDB evidence while tables, receipts, and refusal states preserve exact auditability.
