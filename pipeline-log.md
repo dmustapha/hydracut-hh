@@ -36,3 +36,14 @@
 2026-08-20T05:45:00Z | hackathon-build | PARTIAL | phase-5 | Adversarial matrix, fail-closed assertions, and timed demo script implemented; typecheck/unit/secret/private-port gates pass; full runtime/rehearsal execution deferred; Phase 6 dispatch next
 2026-08-20T05:45:00Z | hackathon-build | START | phase-6 | Dispatching local deployment/final-evidence agent; persistent VM DEP-001 and GitHub credential blockers remain explicit
 2026-08-20T06:00:00Z | hackathon-build | PARTIAL | phase-6 | Local README/license/attribution/submission artifacts prepared; persistent VM DEP-001 and GitHub BLK-EXT-001 block Deploy, fresh receipt/SARIF, and final evidence; no claims fabricated
+2026-08-20T06:30:00Z | hackathon-debug | START | baseline | Full quality gate started; build prerequisite complete_with_blockers, external corpus and VM blockers carried forward
+2026-08-20T05:04:00Z | hackathon-debug | COMPLETE | baseline | Build tests and Compose runtime verified; 4/4 domain tests, full web image, and /api/health 200 after three runtime fixes; source/test ratio 0.139 warning
+2026-08-20T06:45:00Z | hackathon-debug | COMPLETE_WITH_BLOCKERS | final | Auth-independent quality gates passed; browser/adversarial evidence remains blocked or unrecoverable; downstream continuation authorized
+2026-08-20T06:45:00Z | hackathon-wire | START | discovery | Dispatching Wire to audit topology, credentials, and real integration paths
+2026-08-20T07:00:00Z | hackathon-wire | START | discovery | topology and upstream blocker audit started
+2026-08-20T07:20:00Z | hackathon-wire | COMPLETE_WITH_DEGRADATION | report | 11 components/11 connections; 6 local checks passed, 5 explicitly skipped; GitHub credential, browser runtime, and persistent VM blockers carried forward
+2026-08-20T07:20:00Z | hackathon-verify | START | milestone | Dispatching milestone verification with conservative scoring and explicit Wire/Debug blockers
+2026-08-20T07:40:00Z | hackathon-verify | COMPLETE | milestone | Winner readiness 54/100; proceed with conditions; demo/submission kill-zone warnings and external blockers remain explicit
+2026-08-20T07:40:00Z | design-forge | START | formalize | Dispatching design formalization/refinement from actual HydraCut UI source
+2026-08-20T07:42:00Z | conductor | CHECKPOINT | design_handoff | Design Brief identity gate requires six user answers before Design Forge dispatch
+2026-08-20T13:05:00Z | hackathon-build | COMPLETE_WITH_ONE_BLOCKER | phase-3-rerun | Authenticated frozen corpus replay passed on isolated clean volumes; fresh receipt 250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804 and SARIF exported; DEP-001 remains

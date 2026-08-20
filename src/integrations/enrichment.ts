@@ -35,7 +35,7 @@ async function getJson<T>(source: "cisa-kev" | "first-epss", url: string, timeou
   const response = await request(url, {
     method: "GET",
     headers: { "user-agent": "HydraCut/1.0" },
-    headersTimeout: 3_000,
+    headersTimeout: 15_000,
     bodyTimeout: timeout,
   });
   if (response.statusCode >= 500 && attempt < 2) {

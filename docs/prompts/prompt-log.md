@@ -347,3 +347,18 @@
 > if build 3 records blockers, you should be able to continue and then i resolve the external blockers when im awake. can you do that?
 
 **Action:** Confirmed external Build blockers will be recorded precisely while auth-independent Build and downstream conductor phases continue without fabricated evidence; dispatched Phase 4 after recording the GitHub rate-limit blocker.
+
+### Prompt 49
+> have we completed all the phases before design forge? and the blockers in the build phase. lets resolve them now
+
+**Action:** Confirmed Build, Debug, Wire, and milestone Verify completed before the Design Forge checkpoint; audited the Build blockers, synced the authenticated GitHub token, and started an authenticated proof rerun.
+
+### Prompt 50
+> continue
+
+**Action:** Continued the clean-volume authenticated proof replay while preserving the original named volumes.
+
+### Prompt 51
+> so whats the fix. reauthentication?
+
+**Action:** Explained that GitHub reauthentication was not required; the keyring token was valid, the Compose secret was empty, and the actual runtime fix was increasing external-source header timeouts before rerunning proof.

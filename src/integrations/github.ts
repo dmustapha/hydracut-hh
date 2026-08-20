@@ -64,7 +64,7 @@ async function githubJson<T>(path: string, attempt = 0): Promise<{ value: T; lin
   const response = await request(`${apiBase}${path}`, {
     method: "GET",
     headers: headers(),
-    headersTimeout: 3_000,
+    headersTimeout: 15_000,
     bodyTimeout: 15_000,
   });
   if (response.statusCode === 403 || response.statusCode === 429) {

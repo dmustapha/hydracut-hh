@@ -103,6 +103,7 @@ services:
     build: { context: ., target: runtime }
     env_file: [.env]
     environment:
+      HOSTNAME: 0.0.0.0
       DATABASE_URL_FILE: /run/secrets/database_url
       HYDRADB_HTTP_URL: http://hydradb:8443
       HYDRADB_GRAPH_NAMESPACE: default

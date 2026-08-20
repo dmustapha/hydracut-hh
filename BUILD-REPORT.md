@@ -215,16 +215,24 @@ Tasks 2.1 through 2.4 passed independently. Task 2.5 is explicitly deferred to t
 |---|---|
 | `pnpm typecheck` | PASS |
 | `pnpm test` | PASS (4/4) |
-| Frozen corpus replay through native graph path | BLOCKED at immutable GitHub SHA retrieval: `GITHUB_RATE_LIMITED` |
+| Frozen corpus replay through native graph path | PASS on authenticated clean-volume rerun; receipt digest `250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804` |
 | Evidence handling | FAIL-CLOSED; no live evidence or proof receipt fabricated |
 
-### External blocker
+### Initial external blocker — resolved
 
-`BLK-EXT-001`: `secrets/github_token` is empty and GitHub rate-limited the authenticated immutable SHA retrieval during the Phase 3 corpus replay. The pipeline is intentionally continuing through later local Build phases; provide a valid token or wait for reset, then rerun the Phase 3 corpus gate before final evidence publication.
+`BLK-EXT-001` was caused by an empty Compose secret even though `gh` was authenticated in the macOS keyring. The token was synced into `secrets/github_token` (0600), the rate-limit budget was verified at 5000 remaining, and the authentic replay passed on isolated proof volumes. The original PostgreSQL/HydraDB volumes were preserved.
+
+### Authenticated rerun evidence
+
+- 3 applications, 1,742 package instances, 2,896 package edges.
+- Portfolio baseline: 9 pairs; portfolio final: 6 pairs; selected final pairs: 0.
+- Native HydraDB `algo.MSpaths`, immutable GitHub SHA inputs, OSV/CISA/FIRST enrichment, proposed-fix outcomes, and verified receipt state.
+- Fresh receipt: `submission/receipt.json` (digest `250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804`).
+- Fresh SARIF: `submission/SARIF-SAMPLE.json`.
 
 ### Phase 3 disposition
 
-Implementation tasks 3.1–3.3 are complete and locally type/unit verified. The corpus gate remains deferred as an explicit external blocker; downstream Build continues without treating partial local output as authentic proof.
+Implementation tasks 3.1–3.3 and the authenticated corpus gate are complete. The proof used isolated temporary volumes because the long-lived local graph had accumulated expensive full-edge scans; original named volumes remain preserved.
 
 ## Phase 4: Incident command UI and BFF
 
@@ -263,11 +271,12 @@ Tasks 4.1–4.5 are implemented and compile/build successfully. Browser proof re
 | `pnpm test` | PASS (4/4) |
 | Secret scan | PASS |
 | `docker compose port hydradb 8443` | No host binding |
-| Adversarial/corpus/rehearsal runtime | BLOCKED before execution by database wiring and `BLK-EXT-001`; no pass fabricated |
+| Authenticated corpus proof runtime | PASS on isolated clean Compose volumes; fresh receipt/SARIF generated |
+| Adversarial/browser/rehearsal runtime | BLOCKED/UNTESTED by standalone runner and browser runtime wiring; no pass fabricated |
 
 ### Phase 5 disposition
 
-Hardening and rehearsal artifacts are complete. The full matrix and timed rehearsal remain runtime-gated and must be rerun through migrated Compose before final package/preflight.
+Hardening artifacts and the authenticated proof are complete. The full adversarial matrix and timed browser rehearsal remain runtime-gated and must be rerun through the corrected Compose test runner before final package/preflight.
 
 ## Phase 6: Deployment and final evidence preparation
 
@@ -275,13 +284,13 @@ Hardening and rehearsal artifacts are complete. The full matrix and timed rehear
 
 - Added root `README.md` with setup and an explicit “How HydraDB is used” section.
 - Added MIT `LICENSE`, `THIRD_PARTY_NOTICES.md`, submission architecture/proof/checklist documents, canonical track/award naming, and the public repository target.
-- Kept fresh `receipt.json`/SARIF and demo URL absent rather than fabricating them while the proof gate is blocked.
+- Generated fresh `submission/receipt.json` and `submission/SARIF-SAMPLE.json` from the authenticated clean-volume replay; no deployment URL is claimed.
 
 ### External blockers
 
 - `DEP-001`: persistent Oracle Always Free ARM64 VM (or equivalent) is mandatory before Deploy; no cloud credentials/provisioning are available in this session.
-- `BLK-EXT-001`: empty GitHub token/rate limit still prevents authentic frozen corpus replay and final receipt generation.
+- `BLK-EXT-001`: resolved by syncing the authenticated `gh` keyring token and rerunning the corpus on isolated proof volumes.
 
 ### Phase 6 disposition
 
-Local packaging is prepared. Deployment, restart proof, live tests, fresh receipt/SARIF, and final preflight remain pending the external VM and GitHub credential checkpoints.
+Local packaging and fresh proof artifacts are prepared. Deployment, restart proof, live tests, browser rehearsal, and final preflight remain pending the external VM and runtime/browser checkpoint.

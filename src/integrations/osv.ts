@@ -42,7 +42,7 @@ async function osvJson<T>(path: string, body?: unknown, attempt = 0): Promise<Os
     method,
     headers: { "content-type": "application/json", "user-agent": "HydraCut/1.0" },
     ...(body ? { body: JSON.stringify(body) } : {}),
-    headersTimeout: 3_000,
+    headersTimeout: 15_000,
     bodyTimeout: 10_000,
   });
   if ((response.statusCode === 429 || response.statusCode >= 500) && attempt < 3) {

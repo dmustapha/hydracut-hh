@@ -24,4 +24,4 @@ HydraCut is built by Dami Mustapha and powered by CampaignRadius. See `THIRD_PAR
 
 ## Status
 
-The Build implementation is complete through the local Phase 6 preparation. Authentic final corpus evidence and persistent deployment remain pending the recorded GitHub credential/rate-limit and cloud-VM checkpoints. No partial or historical result is presented as a fresh proof.
+The Build implementation is complete through the local Phase 6 preparation. Authentic final corpus evidence now passes on an authenticated isolated Compose replay and is published as `submission/receipt.json` plus `submission/SARIF-SAMPLE.json`. Persistent deployment remains pending the recorded cloud-VM checkpoint; no deployment URL is fabricated.

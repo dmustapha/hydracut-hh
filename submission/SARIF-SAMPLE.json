@@ -1,0 +1,257 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "HydraCut",
+          "version": "1.0.0",
+          "rules": [
+            {
+              "id": "GHSA-3jxr-9vmj-r5cp",
+              "name": "brace-expansion@1.1.11",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-3jxr-9vmj-r5cp"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-3jxr-9vmj-r5cp",
+              "properties": {
+                "aliases": [
+                  "CVE-2026-13149"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+              }
+            },
+            {
+              "id": "GHSA-c2qf-rxjj-qqgw",
+              "name": "semver@5.7.1",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-c2qf-rxjj-qqgw"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-c2qf-rxjj-qqgw",
+              "properties": {
+                "aliases": [
+                  "CVE-2022-25883"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              }
+            },
+            {
+              "id": "GHSA-f886-m6hf-6m8v",
+              "name": "brace-expansion@1.1.11",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-f886-m6hf-6m8v"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-f886-m6hf-6m8v",
+              "properties": {
+                "aliases": [
+                  "CVE-2026-33750"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H"
+              }
+            },
+            {
+              "id": "GHSA-mh99-v99m-4gvg",
+              "name": "brace-expansion@1.1.11",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-mh99-v99m-4gvg"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-mh99-v99m-4gvg",
+              "properties": {
+                "aliases": [
+                  "CVE-2026-14257"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              }
+            },
+            {
+              "id": "GHSA-rgw5-rvv9-x895",
+              "name": "brace-expansion@1.1.11",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-rgw5-rvv9-x895"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-rgw5-rvv9-x895",
+              "properties": {
+                "aliases": [
+                  "CVE-2026-69152"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+              }
+            },
+            {
+              "id": "GHSA-v6h2-p8h4-qcjw",
+              "name": "brace-expansion@1.1.11",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-v6h2-p8h4-qcjw"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-v6h2-p8h4-qcjw",
+              "properties": {
+                "aliases": [
+                  "CVE-2025-5889"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L"
+              }
+            },
+            {
+              "id": "GHSA-xvch-5gv4-984h",
+              "name": "minimist@1.2.5",
+              "shortDescription": {
+                "text": "OSV advisory GHSA-xvch-5gv4-984h"
+              },
+              "helpUri": "https://osv.dev/vulnerability/GHSA-xvch-5gv4-984h",
+              "properties": {
+                "aliases": [
+                  "CVE-2021-44906"
+                ],
+                "cvssVector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches arkon/crcmaker."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "arkon/crcmaker"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:brace-expansion@1.1.11:arkon/crcmaker",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        },
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches BetaHuhn/spaces-cli."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "BetaHuhn/spaces-cli"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:brace-expansion@1.1.11:BetaHuhn/spaces-cli",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        },
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches bradtraversy/nodekb."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "bradtraversy/nodekb"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:brace-expansion@1.1.11:bradtraversy/nodekb",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        },
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches arkon/crcmaker."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "arkon/crcmaker"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:semver@5.7.1:arkon/crcmaker",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        },
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches BetaHuhn/spaces-cli."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "BetaHuhn/spaces-cli"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:semver@5.7.1:BetaHuhn/spaces-cli",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        },
+        {
+          "ruleId": "OSV-SET",
+          "level": "warning",
+          "message": {
+            "text": "Dependency-level potential exposure reaches bradtraversy/nodekb."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "bradtraversy/nodekb"
+                }
+              }
+            }
+          ],
+          "properties": {
+            "hydracut/receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804",
+            "hydracut/resultState": "VERIFIED_WITHIN_BOUNDS",
+            "hydracut/pairKey": "OSV-SET:semver@5.7.1:bradtraversy/nodekb",
+            "hydracut/maxLen": 12,
+            "hydracut/pathCount": 1
+          }
+        }
+      ],
+      "properties": {
+        "receiptDigest": "250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804"
+      }
+    }
+  ]
+}

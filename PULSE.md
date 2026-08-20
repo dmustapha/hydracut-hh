@@ -377,3 +377,65 @@
 
 #### For Next Skill
 - Build is locally complete but cannot close the deployment/final-evidence gate. Resume at Deploy once the VM and GitHub credential are available, then run downstream conductor phases.
+
+---
+### debug: 2026-08-20T06:45:00Z
+**Status:** COMPLETE_WITH_BLOCKERS
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Baseline install/typecheck/unit, pinned Compose configuration, migration, full web image, `/api/health`, HydraDB native contract (4/4), optional edge (1/1), and static security/private-port checks passed.
+- Runtime fixes recorded: build-only database placeholder, nested standalone `@swc/helpers`, and `HOSTNAME=0.0.0.0` for container binding.
+
+#### Blockers
+- Browser runner reached `next build` and invoked 18 Playwright tests but emitted the standalone-runtime warning; the temporary test-runner was removed before an exact result was recoverable, so no browser pass is claimed.
+- Authentic corpus/adversarial evidence remains fail-closed behind `BLK-EXT-001`; `DEP-001` remains required before Deploy.
+
+#### For Next Skill
+- Continue Wire and all local downstream phases. Re-run browser/corpus evidence only after runtime wiring and external GitHub credentials/rate limits are resolved.
+
+---
+### wire: 2026-08-20T07:20:00Z
+**Status:** WIRED-WITH-DEGRADATION
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Discovered 11 components and 11 connections; audited four credentials (three valid mode-0600 secrets, empty GitHub token).
+- Real local checks passed: web health 200 with database/HydraDB true, 12 PostgreSQL tables, private HydraDB reachability, OSV/enrichment configuration, and Arborist parser.
+
+#### Blockers
+- `BLK-EXT-001` blocks authenticated GitHub replay and fresh immutable proof.
+- `DEP-001` blocks Caddy/persistent deployment; browser runner is uncredited after standalone-runtime warning.
+
+#### For Next Skill
+- Verify milestone may continue with conservative scores and explicit kill-zone warnings. Do not claim skipped browser/GitHub/VM evidence as passes.
+
+---
+### verify_milestone: 2026-08-20T07:40:00Z
+**Status:** PROCEED_WITH_CONDITIONS
+**Session(s):** 1 autonomous conductor dispatch
+
+#### Done
+- Milestone audit scored winner readiness 54/100 from executed Build, Debug, and Wire evidence.
+- HydraDB sponsor integration is conditionally clear; native contract and optional edge checks are real local passes.
+
+#### Blockers
+- Demo reliability and submission completeness warnings remain: browser result, fresh receipt/SARIF, public repo confirmation, and deployment URL are not yet proven.
+
+#### For Next Skill
+- Continue Design Forge and local downstream phases. Resolve GitHub credentials/rate limit and provision the persistent VM before Deploy/preflight.
+
+---
+### build-blocker-resolution: 2026-08-20T13:05:00Z
+**Status:** PARTIAL_RESOLUTION
+
+#### Resolved
+- `BLK-EXT-001` cleared: active `gh` keyring token synced to `secrets/github_token` (0600), rate limit 5000 remaining, authenticated frozen corpus replay passed.
+- Fresh verified receipt digest: `250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804`; fresh SARIF exported.
+- Proof observed 3 applications, 1,742 package instances, 2,896 package edges, 9 baseline pairs, 6 final pairs, 0 selected final pairs.
+
+#### Remaining blocker
+- `DEP-001`: persistent zero-cost VM still requires Oracle/cloud credentials and provisioning. Browser/rehearsal runtime remains separately uncredited.
+
+#### For Next Skill
+- Design Forge remains at the mandatory identity checkpoint. After that, continue local stress/polish; do not Deploy until the VM exists.

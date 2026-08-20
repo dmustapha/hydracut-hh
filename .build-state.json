@@ -7,14 +7,6 @@
   "status": "complete",
   "blockers": [
     {
-      "id": "BLK-EXT-001",
-      "phase": "phase-3",
-      "state": "external",
-      "error": "GITHUB_RATE_LIMITED",
-      "detail": "Frozen corpus replay reached immutable GitHub SHA retrieval, but local secrets/github_token is empty and GitHub returned rate-limit response.",
-      "nextAction": "Provide a valid GitHub token or wait for the reset; rerun the Phase 3 corpus gate before final evidence publication."
-    },
-    {
       "id": "DEP-001",
       "phase": "phase-6",
       "state": "external",
@@ -381,10 +373,10 @@
     {
       "step": "3.1",
       "id": "DEV-016",
-      "description": "Phase 3 corpus gate is externally blocked at immutable GitHub SHA retrieval",
-      "reason": "Local GitHub token is empty and GitHub returned GITHUB_RATE_LIMITED during replay",
-      "class": "BLOCKED_EXTERNAL",
-      "impact": "No live evidence is fabricated; rerun is required before final evidence publication"
+      "description": "Phase 3 corpus replay initially hit an external GitHub rate limit; authenticated rerun completed",
+      "reason": "The Compose secret was empty during the first attempt; gh keyring token was later synced and replay rerun on clean proof volumes",
+      "class": "RESOLVED",
+      "impact": "Authentic immutable corpus and combined native proof now have fresh receipt evidence"
     },
     {
       "step": "4.5",
@@ -429,10 +421,10 @@
     {
       "step": "6.2",
       "id": "DEV-022",
-      "description": "Final receipt/SARIF files remain intentionally absent",
-      "reason": "BLK-EXT-001 prevents authentic corpus proof; historical data cannot be relabeled as fresh evidence",
-      "class": "BLOCKED_EXTERNAL",
-      "impact": "Package remains honest and incomplete until the authenticated proof reruns"
+      "description": "Fresh receipt/SARIF were generated from the authenticated clean-volume proof replay",
+      "reason": "Initial absence was intentional while BLK-EXT-001 was unresolved",
+      "class": "RESOLVED",
+      "impact": "Fresh proof artifacts are available; deployment and browser evidence remain pending"
     },
     {
       "step": "1.5",

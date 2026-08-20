@@ -21,6 +21,7 @@ test-results/
 .conductor-lock/
 .conductor-lock.*
 docker-compose.phase3-clean.yml
+docker-compose.proof-clean.yml
 tsconfig.tsbuildinfo
 
 data/

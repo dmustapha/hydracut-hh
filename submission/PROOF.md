@@ -1,8 +1,8 @@
 # Proof status
 
-Fresh authenticated corpus replay is intentionally pending. The local GitHub secret is empty and the replay received `GITHUB_RATE_LIMITED` (`BLK-EXT-001`). A persistent cloud VM is also mandatory before Deploy (`DEP-001`).
+Fresh authenticated corpus replay passed on isolated clean Compose volumes. The GitHub token was synced from the authenticated `gh` keyring session and the replay produced `submission/receipt.json` (digest `250ca53c54c0e90b647e1432fe9d85bdb41ffff5f0904df2290f461240200804`) plus `submission/SARIF-SAMPLE.json`. A persistent cloud VM is still mandatory before Deploy (`DEP-001`).
 
-No receipt, SARIF, pair count, screenshot, demo URL, or deployment claim is fabricated while those gates are unresolved. Reproduce after resolving the blockers with:
+No screenshot, demo URL, or deployment claim is fabricated while the remaining runtime/deployment gates are unresolved. Reproduce the proof after a clean authenticated environment with:
 
 ```bash
 docker compose run --rm worker pnpm proof

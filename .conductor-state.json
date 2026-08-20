@@ -43,7 +43,7 @@
     "copilot_pat_available": false
   },
   "pipeline": {
-    "current_phase": "debug",
+    "current_phase": "design_forge",
     "project_name": "hydracut",
     "phases": {
       "intel": {
@@ -77,19 +77,19 @@
         "completed_at": "2026-08-20T06:10:00Z"
       },
       "debug": {
-        "status": "pending",
-        "dispatched_at": null,
-        "completed_at": null
+        "status": "complete",
+        "dispatched_at": "2026-08-20T06:30:00Z",
+        "completed_at": "2026-08-20T06:45:00Z"
       },
       "wire": {
-        "status": "pending",
-        "dispatched_at": null,
-        "completed_at": null
+        "status": "complete",
+        "dispatched_at": "2026-08-20T06:45:00Z",
+        "completed_at": "2026-08-20T07:20:00Z"
       },
       "verify_milestone": {
-        "status": "pending",
-        "dispatched_at": null,
-        "completed_at": null
+        "status": "complete",
+        "dispatched_at": "2026-08-20T07:20:00Z",
+        "completed_at": "2026-08-20T07:40:00Z"
       },
       "design_forge": {
         "status": "pending",
@@ -182,6 +182,19 @@
       "report": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/BUILD-REPORT.md",
       "state": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.build-state.json",
       "pulse": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/PULSE.md"
+    },
+    "debug": {
+      "report": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/DEBUG-REPORT.md",
+      "state": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.debug-state.json",
+      "results_dir": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/debug-results"
+    },
+    "wire": {
+      "report": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/WIRE-REPORT.md",
+      "state": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.wire-state.json"
+    },
+    "verify_milestone": {
+      "report": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/VERIFY-REPORT.md",
+      "state": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.verify-state.json"
     }
   },
   "intelState": {
@@ -228,12 +241,35 @@
     "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.build-state.json",
     "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/BUILD-REPORT.md",
     "completed_internal_phases": 7,
-    "blockers": ["BLK-EXT-001", "DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-021", "DEV-022"],
-    "summary": "Local Build implementation and packaging complete; authentic corpus, full browser rehearsal, persistent VM deployment, and fresh final evidence remain externally/runtime gated."
+    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-021"],
+    "summary": "Local Build implementation and authenticated corpus/fresh proof complete; full browser rehearsal and persistent VM deployment remain externally/runtime gated."
   },
-  "debugState": null,
-  "wireState": null,
-  "verifyMilestoneState": null,
+  "debugState": {
+    "status": "complete_with_blockers",
+    "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.debug-state.json",
+    "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/DEBUG-REPORT.md",
+    "confidenceScore": 61,
+    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-022"],
+    "summary": "Baseline, HydraDB contract, optional edge, Compose health, migration, static security gates, and authenticated corpus proof pass; browser/adversarial evidence remains blocked or unrecoverable and is not claimed."
+  },
+  "wireState": {
+    "status": "WIRED-WITH-DEGRADATION",
+    "connectionsTotal": 11,
+    "connectionsPassed": 7,
+    "credentialsResolved": 4,
+    "credentialsTotal": 4,
+    "demoFlowTest": "SKIPPED",
+    "blockers": ["DEP-001", "browser-runtime-gated"]
+  },
+  "verifyMilestoneState": {
+    "status": "complete",
+    "winnerReadiness": 54,
+    "killZonesTriggered": 2,
+    "mode": "milestone",
+    "decision": "PROCEED",
+    "kz_warnings": ["demo reliability", "submission completeness"],
+    "conditions": ["GitHub token/rate-limit reset", "persistent Oracle ARM64 VM", "fresh receipt/SARIF", "browser runtime rerun"]
+  },
   "verifyPreflightState": null,
   "demoState": null,
   "deployState": null,
