@@ -4,17 +4,17 @@
 - **Generated:** 2026-08-20T06:30:00Z
 - **Last Updated:** 2026-08-20T06:45:00Z
 - **Confidence Score:** 61/100
-- **Unresolved Issues:** browser runner result was not recoverable after the temporary test-runner container was removed; authentic corpus replay remains fail-closed behind BLK-EXT-001 and the optional-edge runtime failure.
+- **Unresolved Issues:** browser runner result was not recoverable after the temporary test-runner container was removed; browser/rehearsal and persistent-VM gates remain.
 - **Security Findings:** no new security findings; secret scan and private HydraDB port gates passed.
 - **Test Coverage:** baseline/domain 4/4; HydraDB contract 4/4; optional edge 1/1; source/test ratio 0.139 (below target).
-- **Recommendation:** continue Wire and downstream local evidence; do not claim browser/rehearsal or fresh immutable receipt evidence until the GitHub credential/rate-limit and runtime wiring blockers are resolved.
+- **Recommendation:** continue downstream local evidence; do not claim browser/rehearsal or deployment evidence until the runtime wiring and persistent-VM gates are resolved.
 
 Debug is running in full mode. External credential and persistent-VM blockers are carried from Build and will not be represented as passes.
 
 ## Quality-Gate Disposition
 - Phase 1 baseline: complete.
 - Phase 2 known risks: complete with blockers; seven accepted/blocked risks are carried from Build.
-- Phase 3 runtime integration: complete with blockers — HydraDB contract 4/4, optional edge 1/1, migration and Compose health pass; authentic corpus replay failed closed (`HYDRADB_HTTP_500`/`GITHUB_RATE_LIMITED`).
+- Phase 3 runtime integration: complete — HydraDB contract 4/4, optional edge 1/1, migration and Compose health pass, and authenticated corpus replay pass with fresh receipt/SARIF.
 - Phase 4 end-to-end: blocked before a recoverable result. The temporary test-runner reached `next build` and invoked 18 Playwright tests, but emitted the standalone-runtime warning (`next start does not work with output: standalone`) and its container was removed before an exact pass/fail result could be captured. No pass is claimed.
 - Phase 5 adversarial: blocked by the same runtime/corpus prerequisites; no fabricated pass.
 - Phase 6 performance: not run because no stable browser/runtime evidence exists and no performance claim is required for the local gate.

@@ -249,7 +249,7 @@
     "state_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/.debug-state.json",
     "report_path": "/Users/MAC/hackathon-toolkit/candidates/hack-hydra/DEBUG-REPORT.md",
     "confidenceScore": 61,
-    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-022"],
+    "blockers": ["DEP-001", "DEV-017", "DEV-019", "DEV-020"],
     "summary": "Baseline, HydraDB contract, optional edge, Compose health, migration, static security gates, and authenticated corpus proof pass; browser/adversarial evidence remains blocked or unrecoverable and is not claimed."
   },
   "wireState": {

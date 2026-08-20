@@ -48,7 +48,7 @@
       "phase": "phase-3-end-to-end-analysis-proof",
       "started_at": "2026-08-20T04:30:00Z",
       "completed_at": "2026-08-20T05:20:00Z",
-      "evidence": "Pipeline, durable queues, proof script, and corpus tests implemented; local domain/type/unit gates pass; native corpus replay is blocked only at immutable GitHub retrieval by BLK-EXT-001"
+      "evidence": "Pipeline, durable queues, proof script, corpus tests, and authenticated native corpus replay complete; fresh receipt/SARIF exported with immutable GitHub retrieval"
     },
     {
       "phase": "phase-4-incident-command-ui",
@@ -66,7 +66,7 @@
       "phase": "phase-6-deployment-final-evidence",
       "started_at": "2026-08-20T05:45:00Z",
       "completed_at": "2026-08-20T06:10:00Z",
-      "evidence": "Local README/license/attribution/submission package preparation completed; persistent VM and authenticated corpus remain explicit external blockers before Deploy/final receipt"
+      "evidence": "Local README/license/attribution/submission package preparation completed; persistent VM remains the explicit external blocker before Deploy/final live evidence"
     }
   ],
   "completedSteps": [

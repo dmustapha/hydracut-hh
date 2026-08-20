@@ -17,7 +17,7 @@
   "testSourceRatio": { "ratio": 0.139, "sourceCount": 36, "testCount": 5, "status": "FAIL", "missingTests": "Most product source files have no corresponding test file; build tests cover domain plus runtime contracts." },
   "phases": {
     "1": { "status": "complete", "baselineSnapshot": { "totalTests": 4, "passing": 4, "coverage": "not measured", "sourceTestRatio": 0.139, "compile": "PASS", "devServer": "PASS via Compose web /api/health (200; database=true; hydradb=true)", "dockerRuntime": "PASS after fixes" }, "fixes": ["Dockerfile build-stage database placeholder", "Dockerfile standalone @swc/helpers inclusion", "docker-compose web HOSTNAME=0.0.0.0"] },
-    "2": { "status": "complete_with_blockers", "risksTriaged": 8, "cleared": 2, "accepted": 6, "blockedEvidence": ["DEP-001", "DEV-017", "DEV-019", "DEV-020", "DEV-022"] },
+    "2": { "status": "complete_with_blockers", "risksTriaged": 8, "cleared": 3, "accepted": 5, "blockedEvidence": ["DEP-001", "DEV-017", "DEV-019", "DEV-020"] },
     "3": { "status": "complete", "layers": { "hydradb": "PASS 4/4", "optional-edge": "PASS 1/1", "compose-health": "PASS", "migration": "PASS", "authenticated-corpus": "PASS" }, "blocked": [] },
     "4": { "status": "blocked", "evidence": "Temporary test-runner reached next build and invoked 18 Playwright tests, but standalone next start warning was emitted and exact result was not recoverable after container removal; no pass claimed." },
     "5": { "status": "blocked", "evidence": "Adversarial/rehearsal remains blocked by browser runtime wiring only; authenticated corpus proof passes." },
@@ -27,8 +27,8 @@
   },
   "phase_ledger": [
     { "phase": "baseline", "started_at": "2026-08-20T04:50:00Z", "completed_at": "2026-08-20T05:04:00Z", "evidence": "pnpm install/typecheck/domain tests, Compose migration and tables, full web image, and Compose /api/health 200 with database=true and hydradb=true" },
-    { "phase": "known_risks", "started_at": "2026-08-20T05:04:00Z", "completed_at": "2026-08-20T05:11:00Z", "evidence": "Eight Build risks classified with one cleared and seven externally/runtime accepted; real proof replay failed closed without receipt" },
-    { "phase": "integration", "started_at": "2026-08-20T05:10:00Z", "completed_at": "2026-08-20T05:12:00Z", "evidence": "HydraDB contract 4/4, optional-edge hardening 1/1, Compose health and migration pass; authentic corpus remains blocked" }
+    { "phase": "known_risks", "started_at": "2026-08-20T05:04:00Z", "completed_at": "2026-08-20T05:11:00Z", "evidence": "Eight Build risks classified; authenticated replay later cleared the immutable-source/receipt risk, while browser/runtime and VM gates remain" },
+    { "phase": "integration", "started_at": "2026-08-20T05:10:00Z", "completed_at": "2026-08-20T05:12:00Z", "evidence": "HydraDB contract 4/4, optional-edge hardening 1/1, Compose health and migration pass; authenticated corpus replay subsequently passed with fresh receipt/SARIF" }
   ],
   "unresolvedBugs": [],
   "infraBlocks": [],
