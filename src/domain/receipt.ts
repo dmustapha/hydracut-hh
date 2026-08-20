@@ -31,6 +31,9 @@ export function finalizeReceipt(input: CanonicalReceipt): {
   assertTraversal(input.baseline);
   assertTraversal(input.verificationUniverse.baseline);
   assertTraversal(input.final);
+  if (input.final.state !== "VERIFIED_WITHIN_BOUNDS") {
+    throw new Error("FINAL_TRAVERSAL_NOT_VERIFIED");
+  }
   if (input.verificationUniverse.sourceKeys.length !== input.final.bounds.matchedSourceCount ||
     input.verificationUniverse.sourceKeys.length !== input.verificationUniverse.baseline.bounds.matchedSourceCount) {
     throw new Error("VERIFICATION_UNIVERSE_MISMATCH");

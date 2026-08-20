@@ -115,6 +115,7 @@ export interface AdvisoryEvidence {
   modifiedAt: string;
   withdrawnAt?: string;
   cvssVector?: string;
+  cvssScore?: number;
   fixedVersions: string[];
   references: string[];
   source: SourceStamp;
@@ -236,6 +237,14 @@ export interface JobStatus {
   createdAt: string;
   updatedAt: string;
 }
+
+export type JobResult =
+  | { kind: "import"; portfolioKey: string; snapshotKey: string; lockfileSha256: string; nextHref: string }
+  | { kind: "refresh"; incidentKey: string; baselinePairDigest: string; verificationBaselinePairDigest: string; nextHref: string }
+  | { kind: "discover"; incidentKey: string; candidateCount: number; candidateJobIds: string[]; candidates: Array<{ repository: string; ref: string; sourceUrl?: string; pullNumber: number }>; nextHref: string }
+  | { kind: "evaluate"; incidentKey: string; proposedFixKey: string; outcome: ProposedFixOutcome; nextHref: string }
+  | { kind: "verify"; digest: string; nextHref: string }
+  | { kind: "cleanup"; scenarioKey: string };
 
 export interface CanonicalReceipt {
   schemaVersion: "1.0.0";

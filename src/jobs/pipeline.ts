@@ -246,6 +246,7 @@ export async function handleRefreshEvidence(payload: { jobId: string; incidentKe
   const bundle = await loadIncidentBundle(payload.incidentKey);
   if (canonicalDigest(payload.sourceFindingIds.slice().sort()) !== canonicalDigest(bundle.incident.sourceFindingKeys.slice().sort())) throw new Error("SOURCE_FINDING_SET_MISMATCH");
   await refreshIncidentEvidence(bundle);
+  await phase(payload.jobId, 1, "ADVISORY_QUERY", { advisories: bundle.advisories.length });
   const selectedEvidence = bundle.advisories[0]?.evidence; if (!selectedEvidence) throw new Error("SELECTED_INCIDENT_EVIDENCE_MISSING");
   const selectedCoordinate = `${selectedEvidence.packageName}@${selectedEvidence.exactVersion}`;
   if (!payload.verificationSourceCoordinates.includes(selectedCoordinate)) throw new Error("SELECTED_INCIDENT_SOURCE_REQUIRED");
@@ -254,8 +255,11 @@ export async function handleRefreshEvidence(payload: { jobId: string; incidentKe
   const verificationEvidence = await boundedProofEvidence(bundle.snapshots, payload.verificationSourceCoordinates, true);
   const verificationBaseline = await traverseSnapshotSet({ scenarioKey: `verification-baseline-${payload.jobId}`,
     portfolioSelector: `verification-${sha256(bundle.incident.portfolioKey).slice(0, 16)}`, snapshots: bundle.snapshots, sources: verificationEvidence.sources, scopes: payload.scopes });
+  await phase(payload.jobId, 2, "GRAPH_WRITE", { snapshots: bundle.snapshots.length });
+  await phase(payload.jobId, 3, "VERIFY_COUNTS", { selectedPairs: baseline.pairs.length, verificationPairs: verificationBaseline.pairs.length });
+  await phase(payload.jobId, 4, "TRAVERSE", { selectedState: baseline.state, verificationState: verificationBaseline.state });
   await saveIncidentBaseline(payload.incidentKey, baseline, verificationBaseline, payload.scopes, payload.verificationSourceCoordinates);
-  return baseline;
+  return { baseline, verificationBaseline };
 }
 
 function pairKeys(pairs: ExposurePair[]): string[] { return pairs.map((pair) => `${pair.sourceKey}:${pair.applicationKey}`).sort(); }
@@ -274,23 +278,28 @@ export async function handleEvaluateProposedFix(payload: EvaluatePayload): Promi
   const baselineRow = bundle.snapshots.find((row) => row.repository === payload.repository); if (!baselineRow) throw new Error("PROPOSED_FIX_REPOSITORY_MISMATCH");
   const imported = await handleImport({ ...payload, role: "proposed" }); const proposedRow = await findSnapshot(imported.snapshotKey); if (!proposedRow) throw new Error("PROPOSED_SNAPSHOT_MISSING");
   const [baselineFindings, proposedFindings] = await Promise.all([scanSnapshot(baselineRow), scanSnapshot(proposedRow)]);
+  await phase(payload.jobId, 6, "ADVISORY_QUERY", { baselineFindings: baselineFindings.length, proposedFindings: proposedFindings.length });
   const findingIdentity = (item: Awaited<ReturnType<typeof scanSnapshot>>[number]) => `${item.advisory.osvId}:${item.advisory.packageName}@${item.advisory.exactVersion}`;
   const beforeFindings = new Set(baselineFindings.map(findingIdentity)); const afterFindings = new Set(proposedFindings.map(findingIdentity));
   const snapshots = bundle.snapshots.map((row) => row.repository === payload.repository ? proposedRow : row);
   const result = await traverseSnapshotSet({ scenarioKey: `fix-${payload.jobId}`, portfolioSelector: `fix-${sha256(payload.jobId).slice(0, 16)}`, snapshots, sources: sourceDefinitions(bundle), scopes: bundle.incident.scopes as Scope[] });
+  await phase(payload.jobId, 7, "TRAVERSE", { pairDigest: result.pairDigest, state: result.state });
   const baseline = new Set(pairKeys(bundle.incident.baseline.pairs)); const proposed = new Set(pairKeys(result.pairs));
   const baselinePairKeys = [...baseline].sort(); const baselineSnapshotKeys = bundle.snapshots.map((row) => row.key).sort(); const baselinePairDigest = canonicalDigest(baselinePairKeys);
   const fixKey = canonicalDigest({ incident: payload.incidentKey, repository: payload.repository, snapshotKey: imported.snapshotKey, baselinePairDigest, baselineSnapshotKeys });
   const outcome: ProposedFixOutcome = { proposedFixKey: fixKey, removed: [...baseline].filter((key) => !proposed.has(key)), persistent: [...baseline].filter((key) => proposed.has(key)), introduced: [...proposed].filter((key) => !baseline.has(key)),
     unknown: result.state === "VERIFIED_WITHIN_BOUNDS" ? [] : [...baseline], otherFindings: { removed: [...beforeFindings].filter((key) => !afterFindings.has(key)), persistent: [...beforeFindings].filter((key) => afterFindings.has(key)), introduced: [...afterFindings].filter((key) => !beforeFindings.has(key)) }, changedPackageCount: changedPackages(baselineRow.topology, proposedRow.topology) };
   await saveProposedFix({ key: fixKey, repository: payload.repository, origin: payload.origin, ...(payload.sourceUrl || imported.sourceUrl ? { sourceUrl: payload.sourceUrl ?? imported.sourceUrl } : {}), ...(payload.kind === "github" ? { headSha: proposedRow.commitSha } : {}), ...(payload.discoveryEvidence ? { discoveryEvidence: payload.discoveryEvidence } : {}), manifestSha256: proposedRow.manifestSha256, lockfileSha256: proposedRow.lockfileSha256, snapshotKey: imported.snapshotKey, changedPackageCount: outcome.changedPackageCount, state: result.state }, payload.incidentKey, outcome, { pairDigest: baselinePairDigest, snapshotKeys: baselineSnapshotKeys });
+  await phase(payload.jobId, 8, "COMPARE", { removed: outcome.removed.length, persistent: outcome.persistent.length, introduced: outcome.introduced.length });
   return outcome;
 }
 
-export async function handleDiscoverProposedFixes(incidentKey: string) {
+export async function handleDiscoverProposedFixes(incidentKey: string, jobId?: string) {
   const bundle = await loadIncidentBundle(incidentKey);
   const entries = await Promise.all(bundle.snapshots.map(async (row) => ({ repository: row.repository, pulls: await discoverProposedFixes(row.repository) })));
-  return entries.flatMap(({ repository, pulls }) => pulls.map((pull) => ({ incidentKey, portfolioKey: bundle.incident.portfolioKey, kind: "github" as const, repository, ref: pull.head.sha, origin: "github-pr" as const, sourceUrl: pull.html_url, discoveryEvidence: pull.evidence })));
+  const candidates = entries.flatMap(({ repository, pulls }) => pulls.map((pull) => ({ incidentKey, portfolioKey: bundle.incident.portfolioKey, kind: "github" as const, repository, ref: pull.head.sha, origin: "github-pr" as const, sourceUrl: pull.html_url, discoveryEvidence: pull.evidence })));
+  if (jobId) await phase(jobId, 1, "FETCH", { repositories: entries.length, candidates: candidates.length });
+  return candidates;
 }
 
 export async function handleVerifyPlan(payload: VerifyPayload): Promise<{ digest: string }> {
@@ -301,6 +310,7 @@ export async function handleVerifyPlan(payload: VerifyPayload): Promise<{ digest
     const bounds = traversalBounds({ sourceSelectors: payload.sources.map((source) => source.selector), targetSelector: payload.portfolioSelector, scopes: payload.scopes, maxImportedDepth: payload.maxImportedDepth, targetCount: payload.applications.length, expectedPairKeyDigest: payload.expectedPairKeyDigest });
     await phase(payload.jobId, 2, "VERIFY_COUNTS", { resultLimit: bounds.resultLimit }); const final = await runTraversal(bounds);
     await phase(payload.jobId, 3, "TRAVERSE", { pairDigest: final.pairDigest, state: final.state });
+    if (final.state !== "VERIFIED_WITHIN_BOUNDS") throw new Error("FINAL_TRAVERSAL_NOT_VERIFIED");
     const receipt: CanonicalReceipt = { ...payload.receipt, resultState: final.state, final, plan: { ...payload.plan, state: final.state === "VERIFIED_WITHIN_BOUNDS" ? "VERIFIED" : "FAILED" } };
     const material = finalizeReceipt(receipt); await saveReceipt(material.digest, material.receipt, material.json); await phase(payload.jobId, 4, "RECEIPT", { digest: material.digest }); return { digest: material.digest };
   } finally {
@@ -360,7 +370,7 @@ export async function reproduceFrozenCorpus() {
   const jobPrefix = `proof-${runId}`;
   for (const [index, row] of evidence.corpus.repositories.entries()) { const imported = await handleImport({ jobId: `${jobPrefix}-base-${index}`, portfolioKey, role: "current", kind: "github", repository: row.repository, ref: row.baseline_commit, expectedLockfileSha256: row.baseline_lock_sha256 }); observedLockfileSha256.push(imported.lockfileSha256); }
   await scanPortfolio(portfolioKey);
-  const incident = (await listIncidents()).find((row) => row.title === `${evidence.selected_incident.advisory}:${evidence.selected_incident.package}@${evidence.selected_incident.affected_version}`); if (!incident) throw new Error("FROZEN_INCIDENT_NOT_FOUND");
+  const incident = (await listIncidents()).find((row) => row.portfolioKey === portfolioKey && row.title === `${evidence.selected_incident.advisory}:${evidence.selected_incident.package}@${evidence.selected_incident.affected_version}`); if (!incident) throw new Error("FROZEN_INCIDENT_NOT_FOUND");
   await handleRefreshEvidence({ jobId: `${jobPrefix}-baseline`, incidentKey: incident.key, scopes: ["production", "development", "optional", "peer"], sourceFindingIds: incident.sourceFindingKeys, verificationSourceCoordinates: evidence.many_source_proof.sources });
   const baselineBundle = await loadIncidentBundle(incident.key); const portfolioBaseline = baselineBundle.incident.verificationBaseline; if (!portfolioBaseline) throw new Error("PROOF_VERIFICATION_BASELINE_MISSING");
   const outcomes: ProposedFixOutcome[] = [];

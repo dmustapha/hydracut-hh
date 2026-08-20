@@ -28,6 +28,8 @@ describe("HydraDB native contract", () => {
   beforeAll(async () => {
     if (!process.env.HYDRADB_HTTP_URL || !process.env.HYDRADB_TOKEN_FILE) throw new Error("HYDRADB_CONTRACT_ENV_REQUIRED");
     await waitForHydraDBReady();
+    await cleanupScenario(scenarioKey);
+    await cleanupScenario(finalScenarioKey);
   });
   afterAll(async () => { await cleanupScenario(scenarioKey); await cleanupScenario(finalScenarioKey); });
   it("returns a bounded strong-consistency MSpaths receipt", async () => {

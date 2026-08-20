@@ -1,0 +1,15 @@
+import { chromium } from "@playwright/test";
+import { mkdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
+
+const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH });
+const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+const logo = `<img src="data:image/svg+xml;base64,${(await readFile("public/logo-v1.svg")).toString("base64")}" />`;
+await mkdir("screenshots/logo-mockups", { recursive: true });
+await page.setContent(`<style>*{box-sizing:border-box}body{margin:0;background:#0c0e0f;color:#f0eee8;font-family:Arial,sans-serif}header{height:180px;padding:48px 72px;display:flex;align-items:center;gap:20px;border-bottom:1px solid #596366}header img{width:64px;height:64px}h1{margin:0;font-size:34px;letter-spacing:.08em}small{display:block;color:#9aa39f;margin-top:8px;letter-spacing:.18em;text-transform:uppercase;font:12px monospace}.og{height:630px;padding:72px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(135deg,#0c0e0f 0 72%,#171b1e 72%)}.og .brand{display:flex;align-items:center;gap:24px}.og .brand img{width:88px;height:88px}.og .brand h1{font-size:48px}.kicker{color:#f15a3c;font:14px monospace;letter-spacing:.2em;text-transform:uppercase}.hero{max-width:760px}.hero h2{font-size:58px;line-height:.98;margin:18px 0}.hero p{font-size:20px;color:#a1a6a1;max-width:620px;line-height:1.4}.foot{font:13px monospace;color:#9aa39f;letter-spacing:.12em}</style><header>${logo}<div><h1>HYDRACUT</h1><small>forensic graph atlas</small></div></header>`);
+await page.setViewportSize({ width: 1200, height: 180 });
+await page.screenshot({ path: "screenshots/logo-mockups/header-v1.png" });
+await page.setViewportSize({ width: 1200, height: 630 });
+await page.setContent(`<style>*{box-sizing:border-box}body{margin:0;background:#0c0e0f;color:#f0eee8;font-family:Arial,sans-serif}.og{height:630px;padding:72px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(135deg,#0c0e0f 0 72%,#171b1e 72%)}.brand{display:flex;align-items:center;gap:24px}.brand img{width:88px;height:88px}.brand h1{margin:0;font-size:48px;letter-spacing:.08em}.brand small{display:block;color:#9aa39f;margin-top:8px;letter-spacing:.18em;text-transform:uppercase;font:12px monospace}.kicker{color:#f15a3c;font:14px monospace;letter-spacing:.2em;text-transform:uppercase}.hero{max-width:760px}.hero h2{font-size:58px;line-height:.98;margin:18px 0}.hero p{font-size:20px;color:#a1a6a1;max-width:620px;line-height:1.4}.foot{font:13px monospace;color:#9aa39f;letter-spacing:.12em}</style><div class='og'><div class='brand'>${logo}<div><h1>HYDRACUT</h1><small>forensic graph atlas</small></div></div><div class='hero'><div class='kicker'>bounded dependency evidence</div><h2>Trace exposure.<br/>Preserve the proof.</h2><p>Native graph traversal for incident impact, proposed-fix outcomes, and immutable receipts.</p></div><div class='foot'>HYDRACUT / SIGNAL VERMIllION / EVIDENCE FIRST</div></div>`);
+await page.screenshot({ path: "screenshots/logo-mockups/og-v1.png" });
+await browser.close();

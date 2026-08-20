@@ -1,1 +1,0 @@
-hydracut/ARCHITECTURE.md

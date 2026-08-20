@@ -86,7 +86,7 @@ describe("mandatory false-clean gates", () => {
     expect(() => assertProposedFixBytes({ manifestSha256: "a", lockfileSha256: "b" }, { manifestSha256: "a", lockfileSha256: "changed" })).toThrow("PROPOSED_FIX_BYTES_DRIFT");
   });
 
-  it("rejects pair tampering and blocks SARIF for a partial receipt", async () => {
+  it("rejects pair tampering and refuses to index a partial receipt", async () => {
     const tampered = { ...proof.receipt, final: { ...proof.receipt.final, pairs: proof.receipt.final.pairs.slice(1) } };
     expect(() => finalizeReceipt(tampered)).toThrow("PAIR_DIGEST_MISMATCH");
     const partialInput: CanonicalReceipt = {
@@ -95,9 +95,7 @@ describe("mandatory false-clean gates", () => {
       plan: { ...proof.receipt.plan, state: "FAILED" },
       final: { ...proof.receipt.final, state: "PARTIAL", refusalReasons: ["ADVERSARIAL_PARTIAL"] },
     };
-    const partial = finalizeReceipt(partialInput);
-    await saveReceipt(partial.digest, partial.receipt, partial.json);
-    await expectEnvelope(await api("GET", `receipts/${partial.digest}/sarif`), [422]);
+    expect(() => finalizeReceipt(partialInput)).toThrow("FINAL_TRAVERSAL_NOT_VERIFIED");
   });
 
   it("rejects source-universe, scope, and current-snapshot drift", async () => {

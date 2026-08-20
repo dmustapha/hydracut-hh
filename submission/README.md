@@ -1,6 +1,6 @@
 # HydraCut submission
 
-**Track:** Track 02-A — Supply Chain Blast Radius
+**Track:** Track 02-A: Supply Chain Blast Radius
 
 **Separate award target:** Best Use of HydraDB
 

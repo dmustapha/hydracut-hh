@@ -18,6 +18,7 @@ interface OsvRecord {
   modified: string;
   withdrawn?: string;
   severity?: Array<{ type: string; score: string }>;
+  database_specific?: Record<string, unknown>;
   affected: Array<{
     package: { ecosystem: string; name: string; purl?: string };
     ranges?: Array<{ events: Array<Record<string, string>> }>;
@@ -136,6 +137,8 @@ export async function fetchAdvisory(
   const events = affected.ranges?.flatMap((range) => range.events) ?? [];
   const fixedVersions = events.flatMap((event) => (event.fixed ? [event.fixed] : []));
   const retrievedAt = new Date().toISOString();
+  const rawCvssScore = record.database_specific?.cvss_score;
+  const cvssScore = typeof rawCvssScore === "number" && Number.isFinite(rawCvssScore) && rawCvssScore >= 0 && rawCvssScore <= 10 ? rawCvssScore : undefined;
   const evidence: AdvisoryEvidence = {
     osvId: record.id,
     aliases: [...new Set(record.aliases ?? [])].sort(),
@@ -150,6 +153,7 @@ export async function fetchAdvisory(
     ...(record.severity?.find((item) => item.type === "CVSS_V3")?.score
       ? { cvssVector: record.severity.find((item) => item.type === "CVSS_V3")!.score }
       : {}),
+    ...(cvssScore === undefined ? {} : { cvssScore }),
     fixedVersions: [...new Set(fixedVersions)].sort(),
     references: [...new Set(record.references?.map((item) => item.url) ?? [])].sort(),
     source: { ...response.stamp, retrievedAt, modifiedAt: record.modified },

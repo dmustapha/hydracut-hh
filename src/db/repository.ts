@@ -27,6 +27,7 @@ import type {
   Scope,
   TraversalReceipt,
   ExploitationEvidence,
+  JobResult,
 } from "../domain/types";
 
 export async function saveSnapshot(row: typeof snapshots.$inferInsert): Promise<void> {
@@ -194,6 +195,9 @@ export async function saveReceipt(
   receipt: CanonicalReceipt,
   canonicalJson: string,
 ): Promise<void> {
+  if (receipt.resultState !== "VERIFIED_WITHIN_BOUNDS" || receipt.final.state !== "VERIFIED_WITHIN_BOUNDS") {
+    throw new Error("RECEIPT_NOT_VERIFIED");
+  }
   await db.insert(receipts).values({
     digest,
     schemaVersion: receipt.schemaVersion,
@@ -207,12 +211,16 @@ export async function saveReceipt(
 }
 
 export async function findReceipt(digest: string) {
-  const rows = await db.select().from(receipts).where(eq(receipts.digest, digest)).limit(1);
+  const rows = await db.select().from(receipts).where(and(
+    eq(receipts.digest, digest),
+    eq(receipts.resultState, "VERIFIED_WITHIN_BOUNDS"),
+  )).limit(1);
   return rows[0] ?? null;
 }
 
 export async function listReceipts() {
-  return db.select().from(receipts).orderBy(desc(receipts.createdAt)).limit(100);
+  return db.select().from(receipts).where(eq(receipts.resultState, "VERIFIED_WITHIN_BOUNDS"))
+    .orderBy(desc(receipts.createdAt)).limit(100);
 }
 
 export async function findPlan(key: string) {
@@ -246,14 +254,14 @@ export async function attachBrokerJob(key: string, brokerId: string): Promise<vo
   if (changed.length !== 1) throw new Error("JOB_QUEUE_STATE_MISMATCH");
 }
 
-export async function markJobState(key: string, state: "RUNNING" | "COMPLETE" | "FAILED", errorCode?: string): Promise<void> {
-  await db.update(jobs).set({ state, ...(errorCode ? { errorCode } : {}), updatedAt: new Date() })
+export async function markJobState(key: string, state: "RUNNING" | "COMPLETE" | "FAILED", errorCode?: string, result?: JobResult): Promise<void> {
+  await db.update(jobs).set({ state, ...(errorCode ? { errorCode } : {}), ...(result ? { result } : {}), updatedAt: new Date() })
     .where(eq(jobs.key, key));
 }
 
 export async function loadIncidentImpact(key: string) {
   const incident = await findIncident(key);
-  return incident?.baseline ? { incidentKey: key, baseline: incident.baseline } : null;
+  return incident?.baseline ? { incidentKey: key, baseline: incident.baseline, verificationBaseline: incident.verificationBaseline ?? null } : null;
 }
 
 export async function loadSystemFacts() {
@@ -300,7 +308,8 @@ export async function listIncidentQueue() {
     const fixes = fixRows.filter((fix) => fix.incidentKey === incident.key);
     return { key: incident.key, portfolioKey: incident.portfolioKey, title: incident.title, packageVersion: evidence ? `${evidence.evidence.packageName}@${evidence.evidence.exactVersion}` : "UNKNOWN",
       kev: evidence?.exploitation.kev ?? "UNKNOWN", epss: evidence?.exploitation.epssProbability ?? "UNKNOWN",
-      cvss: evidence?.evidence.cvssVector ?? "UNKNOWN",
+      cvss: evidence?.evidence.cvssScore ?? null,
+      applicationKeys: [...new Set(incident.baseline?.pairs.map((pair) => pair.applicationKey) ?? [])].sort(),
       productionApplications: new Set(incident.baseline?.pairs.filter((pair) => pair.scopes.includes("production")).map((pair) => pair.applicationKey) ?? []).size,
       allApplications: new Set(incident.baseline?.pairs.map((pair) => pair.applicationKey) ?? []).size,
       proposedFixes: fixes.filter((fix) => fix.state === "VERIFIED_WITHIN_BOUNDS").length,

@@ -1,0 +1,14 @@
+{
+  "name": "HydraCut",
+  "tagline": "Forensic graph operations for bounded dependency exposure.",
+  "colorMode": "dark-only",
+  "brandColor": "#F15A3C",
+  "ink": ["#0C0E0F", "#111416", "#171B1E", "#1D2226", "#F0EEE8"],
+  "semantic": { "success": "#8DC9A6", "warning": "#E1B765", "danger": "#F08376" },
+  "fonts": { "display": "IBM Plex Sans Condensed", "body": "IBM Plex Sans", "mono": "IBM Plex Mono" },
+  "radii": { "sm": 4, "md": 8, "lg": 8, "xl": 12 },
+  "shadowPhilosophy": "soft-elevation",
+  "signatureElement": "A signal-vermilion cut line derived from the real native traversal witness.",
+  "accent": "#F15A3C",
+  "logoPath": "public/logo.svg"
+}

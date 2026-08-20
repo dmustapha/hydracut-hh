@@ -1,5 +1,6 @@
 // File: src/integrations/hydradb.ts
 import { readFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
 import { request } from "undici";
 import { canonicalDigest, deterministicId, sha256 } from "../domain/canonical";
 import type {
@@ -52,42 +53,31 @@ async function query(
   retryRead = false,
 ): Promise<QueryResponse> {
   const { url, token, namespace } = config();
+  const queryId = randomUUID();
   const started = performance.now();
-  const execute = () => request(`${url}/v1/graphs/${namespace}/query`, {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${token}`,
-      "content-type": "application/json",
-      "x-graph-namespace": namespace,
-      "x-consistency": "strong",
-      "idempotency-key": canonicalDigest({ cypher, parameters }),
-    },
-    body: JSON.stringify({
-      cell_id: "cell-0",
-      query: cypher,
-      parameters,
-      consistency: "strong",
-    }),
-    headersTimeout: 15_000,
-    bodyTimeout: 30_000,
-  });
-  let retried = false;
-  const response = await execute().catch(async (error) => {
-    if (!retryRead) throw error;
-    retried = true;
-    return execute();
-  });
-  if (response.statusCode >= 500 && retryRead && !retried) {
-    await response.body.dump();
-    return query(cypher, parameters, false);
+  for (let attempt = 1; attempt <= (retryRead ? 20 : 1); attempt += 1) {
+    try {
+      const response = await request(`${url}/v1/graphs/${namespace}/query`, {
+        method: "POST",
+        headers: { authorization: `Bearer ${token}`, "content-type": "application/json", "x-graph-namespace": namespace, "x-consistency": "strong", "idempotency-key": queryId },
+        body: JSON.stringify({ cell_id: "cell-0", query_id: queryId, query: cypher, parameters, consistency: "strong" }),
+        headersTimeout: 15_000,
+        bodyTimeout: 30_000,
+      });
+      if (response.statusCode === 200) {
+        const value = (await response.body.json()) as QueryResponse;
+        value.metadata = { ...value.metadata, elapsed_ms: performance.now() - started };
+        return value;
+      }
+      const detail = await response.body.text();
+      const retryable = response.statusCode >= 500 || (response.statusCode === 400 && detail.includes("is already active"));
+      if (!retryRead || !retryable || attempt === 20) throw new Error(`HYDRADB_HTTP_${response.statusCode}:${cypher}:${detail}`);
+    } catch (error) {
+      if (!retryRead || attempt === 20 || String(error).includes("HYDRADB_HTTP_")) throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
   }
-  if (response.statusCode !== 200) {
-    const detail = await response.body.text();
-    throw new Error(`HYDRADB_HTTP_${response.statusCode}:${cypher}:${detail}`);
-  }
-  const value = (await response.body.json()) as QueryResponse;
-  value.metadata = { ...value.metadata, elapsed_ms: performance.now() - started };
-  return value;
+  throw new Error("HYDRADB_QUERY_RETRY_EXHAUSTED");
 }
 
 export async function waitForHydraDBReady(attempts = 30): Promise<void> {
@@ -242,27 +232,40 @@ export function traversalBounds(input: {
   };
 }
 
+function nodeProperties(node: unknown): Record<string, unknown> | null {
+  if (!node || typeof node !== "object") return null;
+  const properties = (node as Record<string, unknown>).properties;
+  return properties && typeof properties === "object" ? properties as Record<string, unknown> : null;
+}
+
 function decodePair(path: unknown, bounds: TraversalBounds): ExposurePair {
-  const value = path as {
-    nodes: Array<{ properties: Record<string, unknown> }>;
-    relationships: Array<{ type: string }>;
-  };
-  const nodes = value.nodes ?? [];
-  const source = nodes[0]?.properties.source_key;
-  const target = nodes.at(-1)?.properties.application_key;
+  const value = path && typeof path === "object" ? path as Record<string, unknown> : {};
+  const nodes = Array.isArray(value.nodes) ? value.nodes : [];
+  const relationships = Array.isArray(value.relationships) ? value.relationships : [];
+  if (nodes.length < 2) throw new Error("PATH_NODE_COUNT_INVALID");
+  if (relationships.length > bounds.maxLen) throw new Error("PATH_DEPTH_EXCEEDED");
+  if (relationships.length !== nodes.length - 1) throw new Error("PATH_RELATIONSHIP_COUNT_INVALID");
+  const properties = nodes.map(nodeProperties);
+  const keys = properties.map((item) => item?.key);
+  if (keys.some((key) => typeof key !== "string" || !key.trim())) throw new Error("CANONICAL_NODE_KEY_INVALID");
+  const source = properties[0]?.source_key;
+  const target = properties.at(-1)?.application_key;
   if (typeof source !== "string" || typeof target !== "string") throw new Error(`PATH_ENDPOINT_SHAPE:${JSON.stringify(value)}`);
-  if (!bounds.sourceSelectors.includes(String(nodes[0]?.properties.source_selector))) throw new Error("UNEXPECTED_SOURCE_ENDPOINT");
-  if (nodes.at(-1)?.properties.portfolio_key !== bounds.targetSelector) throw new Error("UNEXPECTED_TARGET_ENDPOINT");
-  const relationshipTypes = value.relationships.map((rel) => rel.type ?? (rel as { edge_type?: string }).edge_type ?? "");
+  if (!bounds.sourceSelectors.includes(String(properties[0]?.source_selector))) throw new Error("UNEXPECTED_SOURCE_ENDPOINT");
+  if (properties.at(-1)?.portfolio_key !== bounds.targetSelector) throw new Error("UNEXPECTED_TARGET_ENDPOINT");
+  const relationshipTypes = relationships.map((relationship) => {
+    if (!relationship || typeof relationship !== "object") return "";
+    const item = relationship as Record<string, unknown>;
+    return typeof item.type === "string" ? item.type : typeof item.edge_type === "string" ? item.edge_type : "";
+  });
   if (relationshipTypes.some((type) => !bounds.relationshipTypes.includes(type))) throw new Error("UNEXPECTED_RELATIONSHIP_TYPE");
-  if (relationshipTypes.length > bounds.maxLen) throw new Error("PATH_DEPTH_EXCEEDED");
   return {
     sourceKey: source,
     applicationKey: target,
     scopes: relationshipTypes.flatMap((type) => ({ PROD_DEPENDS_ON: ["production"], DEV_DEPENDS_ON: ["development"], OPTIONAL_DEPENDS_ON: ["optional"], PEER_DEPENDS_ON: ["peer"] }[type] ?? [])) as Scope[],
-    witnessNodeKeys: nodes.map((node) => String(node.properties.key)),
+    witnessNodeKeys: keys as string[],
     witnessRelationshipTypes: relationshipTypes,
-    depth: value.relationships.length,
+    depth: relationships.length,
   };
 }
 
@@ -273,7 +276,19 @@ export function validateTraversalResponse(
 ): TraversalReceipt {
   const cypher = renderTraversal(bounds);
   const rows = rowsOf(response);
-  const pairs = rows.map((row) => decodePair(row.path, bounds)).sort((a, b) =>
+  const witnessRefusalReasons: string[] = [];
+  const pairs = rows.flatMap((row) => {
+    try {
+      return [decodePair(row.path, bounds)];
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : "PATH_SHAPE_INVALID";
+      if (["PATH_NODE_COUNT_INVALID", "PATH_RELATIONSHIP_COUNT_INVALID", "CANONICAL_NODE_KEY_INVALID"].includes(reason)) {
+        witnessRefusalReasons.push(reason);
+        return [];
+      }
+      throw error;
+    }
+  }).sort((a, b) =>
     `${a.sourceKey}:${a.applicationKey}`.localeCompare(`${b.sourceKey}:${b.applicationKey}`),
   );
   const keys = pairs.map((pair) => `${pair.sourceKey}:${pair.applicationKey}`);
@@ -290,6 +305,7 @@ export function validateTraversalResponse(
     ...(typeof readEpoch !== "number" ? ["READ_EPOCH_MISSING"] : []),
     ...(typeof bookmark !== "string" || !bookmark ? ["BOOKMARK_MISSING"] : []),
     ...(canonicalDigest(keys.slice().sort()) !== bounds.expectedPairKeyDigest ? ["BFS_PAIR_SET_MISMATCH"] : []),
+    ...new Set(witnessRefusalReasons),
   ];
   return {
     query: cypher,

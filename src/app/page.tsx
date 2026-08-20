@@ -1,5 +1,13 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
+import { listIncidentQueue, listReceipts, loadIncidentImpact } from "../db/repository";
+import { EmptyState, EvidenceLink, MetricTile, PageHeader, WitnessGraph } from "../components/atlas";
 
-export default function HomePage(): never {
-  redirect("/incidents?role=appsec");
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const [incidents, receipts] = await Promise.all([listIncidentQueue(), listReceipts()]);
+  const impact = incidents[0] ? await loadIncidentImpact(incidents[0].key) : null;
+  const verified = incidents.filter((row) => row.state.includes("VERIFIED")).length;
+  const latest = receipts[0];
+  return <div className="stack-lg home-atlas"><PageHeader eyebrow="HydraCut · forensic graph atlas" title="Dependency exposure, handled like evidence." description="HydraCut verifies bounded portfolio exposure and authentic proposed-fix outcomes through a native HydraDB traversal. The selected incident is never a universal safety claim." action={<div className="row"><EvidenceLink href="/incidents">Open incident command</EvidenceLink>{latest && <EvidenceLink href={`/proof/${latest.digest}`}>View latest receipt</EvidenceLink>}</div>} /><div className="grid-4"><MetricTile tone="accented" value={incidents.length} label="advisory-backed incidents" /><MetricTile value={verified} label="verified within bounds" /><MetricTile value={latest ? latest.receipt.final.pairs.length : "—"} label="latest bounded final pairs" /><MetricTile value={latest ? latest.digest.slice(0, 8) : "—"} label="latest receipt digest" /></div><section className="home-workflow"><div className="stack workflow-narrative"><div className="section-head"><h2>Import → traverse → receipt</h2><span className="eyebrow">real evidence only</span></div><ol className="evidence-tray process-ledger"><li><strong>Import exact bytes</strong><span>Resolve a public ref or local manifest and lockfile without repository execution.</span></li><li><strong>Trace native impact</strong><span>Run `algo.MSpaths` against the persisted dependency graph.</span></li><li><strong>Evaluate complete states</strong><span>Compare authentic proposed-fix snapshots, never a generated patch.</span></li><li><strong>Publish immutable receipt</strong><span>Record bounded conclusion, inputs, queries, digests, and limitations.</span></li></ol></div>{impact?.baseline ? <WitnessGraph pairs={impact.baseline.pairs} title="Live evidence ribbon · selected impact witness" /> : <EmptyState title="No verified graph yet" description="The queue contains advisory-backed incidents, but no persisted native traversal is selected for this homepage witness." action={<EvidenceLink href="/imports">Import immutable evidence</EvidenceLink>} />}</section><section className="boundary-band"><div><p className="eyebrow">Interpretation boundary</p><h2>Selected incident ≠ portfolio safety</h2></div><p>Every graph, plan, and receipt keeps selected-incident residuals separate from the wider verification universe. Partial, stale, or refused outcomes never inherit verified language.</p><Link className="button" href="/system">Inspect runtime boundary</Link></section></div>;
 }

@@ -2,6 +2,8 @@
 import { describe, expect, it } from "vitest";
 import { canonicalDigest, canonicalJson } from "../src/domain/canonical";
 import { solveCoveragePlan } from "../src/domain/planner";
+import { finalizeReceipt } from "../src/domain/receipt";
+import type { CanonicalReceipt, TraversalReceipt } from "../src/domain/types";
 
 describe("canonical truth", () => {
   it("sorts keys and preserves array order", () => {
@@ -59,5 +61,74 @@ describe("coverage planner", () => {
       choices: [choice("a-forbidden"), choice("z-valid")],
       constraints: { requiredFixKeys: [], forbiddenFixKeys: ["a-forbidden"] }, maxStates: 10 });
     expect(plan.proposedFixKeys).toEqual(["z-valid"]);
+  });
+});
+
+describe("canonical receipt", () => {
+  it("refuses to finalize a receipt when the final traversal is not verified", () => {
+    const traversal = (state: TraversalReceipt["state"]): TraversalReceipt => ({
+      query: "RETURN path",
+      querySha256: "a".repeat(64),
+      bounds: {
+        sourceSelectors: ["source"],
+        targetSelector: "portfolio",
+        relationshipTypes: ["PROD_DEPENDS_ON"],
+        maxLen: 1,
+        pathCount: 1,
+        resultLimit: 1,
+        matchedSourceCount: 1,
+        matchedTargetCount: 1,
+        expectedPairKeyDigest: canonicalDigest([]),
+      },
+      pairs: [],
+      pairDigest: canonicalDigest([]),
+      pairKeyDigest: canonicalDigest([]),
+      readEpoch: 1,
+      bookmark: "bookmark",
+      elapsedMs: 1,
+      cursorPresent: false,
+      duplicatePairCount: 0,
+      state,
+      refusalReasons: state === "VERIFIED_WITHIN_BOUNDS" ? [] : ["ADVERSARIAL_PARTIAL"],
+    });
+    const baseline = traversal("VERIFIED_WITHIN_BOUNDS");
+    const partial = traversal("PARTIAL");
+    const input = {
+      schemaVersion: "1.0.0",
+      createdAt: "2026-08-20T00:00:00.000Z",
+      resultState: "PARTIAL",
+      portfolioKey: "portfolio",
+      incidentKey: "incident",
+      selectedSourceKeys: ["source"],
+      inputs: [],
+      topologies: [],
+      sources: [],
+      advisories: [],
+      exploitation: [],
+      baseline,
+      verificationUniverse: { kind: "selected-incident", sourceKeys: ["source"], baseline },
+      final: partial,
+      proposedFixes: [],
+      outcomes: [],
+      plan: {
+        key: "plan",
+        incidentKey: "incident",
+        proposedFixKeys: [],
+        baselinePairKeys: [],
+        baselineSnapshotKeys: [],
+        verificationSourceCoordinates: [],
+        verificationBaselinePairKeys: [],
+        scopes: ["production"],
+        predictedResidualPairKeys: [],
+        constraints: { requiredFixKeys: [], forbiddenFixKeys: [] },
+        exhaustiveWithinBounds: true,
+        state: "FAILED",
+      },
+      hydraDbImageDigest: "image",
+      graphSchemaVersion: "schema",
+      limitations: [],
+    } as CanonicalReceipt;
+
+    expect(() => finalizeReceipt(input)).toThrow("FINAL_TRAVERSAL_NOT_VERIFIED");
   });
 });
