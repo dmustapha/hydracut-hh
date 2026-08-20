@@ -416,14 +416,14 @@
 **Session(s):** 1 autonomous conductor dispatch
 
 #### Done
-- Milestone audit scored winner readiness 54/100 from executed Build, Debug, and Wire evidence.
-- HydraDB sponsor integration is conditionally clear; native contract and optional edge checks are real local passes.
+- Milestone audit now scores winner readiness 66/100 after authenticated proof resolution.
+- HydraDB sponsor integration is conditionally clear; native contract, optional edge, and fresh combined proof are real local passes.
 
 #### Blockers
-- Demo reliability and submission completeness warnings remain: browser result, fresh receipt/SARIF, public repo confirmation, and deployment URL are not yet proven.
+- Demo reliability warning remains: browser result and deployment URL are not yet proven; fresh receipt/SARIF are now present.
 
 #### For Next Skill
-- Continue Design Forge and local downstream phases. Resolve GitHub credentials/rate limit and provision the persistent VM before Deploy/preflight.
+- Continue Design Forge and local downstream phases. Provision the persistent VM and rerun browser rehearsal before Deploy/preflight.
 
 ---
 ### build-blocker-resolution: 2026-08-20T13:05:00Z

@@ -263,12 +263,12 @@
   },
   "verifyMilestoneState": {
     "status": "complete",
-    "winnerReadiness": 54,
+    "winnerReadiness": 66,
     "killZonesTriggered": 2,
     "mode": "milestone",
     "decision": "PROCEED",
     "kz_warnings": ["demo reliability", "submission completeness"],
-    "conditions": ["GitHub token/rate-limit reset", "persistent Oracle ARM64 VM", "fresh receipt/SARIF", "browser runtime rerun"]
+    "conditions": ["persistent Oracle ARM64 VM", "browser runtime rerun"]
   },
   "verifyPreflightState": null,
   "demoState": null,
