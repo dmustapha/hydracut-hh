@@ -72,7 +72,7 @@
         "completed_at": "2026-08-20T02:04:56Z"
       },
       "build": {
-        "status": "complete_with_blockers",
+        "status": "complete",
         "dispatched_at": "2026-08-20T02:21:47Z",
         "completed_at": "2026-08-20T06:10:00Z"
       },
