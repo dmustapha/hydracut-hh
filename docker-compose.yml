@@ -14,6 +14,14 @@ services:
       retries: 20
     restart: unless-stopped
 
+  hydradb-init:
+    image: ghcr.io/hydra-db/hydradb@sha256:db78309a233be54662db29744047e985a39b51c45a270d1a1f47c31a62cdb709
+    user: '0:0'
+    entrypoint: [/bin/sh, -c]
+    command: ['chown -R 10001:10001 /tmp/graph && chmod 0700 /tmp/graph']
+    volumes: [hydradb_data:/tmp/graph]
+    restart: 'no'
+
   hydradb:
     image: ghcr.io/hydra-db/hydradb@sha256:db78309a233be54662db29744047e985a39b51c45a270d1a1f47c31a62cdb709
     entrypoint: [/bin/sh, -c, 'mkdir -p /tmp/graph/store /tmp/graph/cache && exec /usr/local/bin/graph-node']
@@ -35,6 +43,8 @@ services:
     secrets: [hydradb_token]
     volumes: [hydradb_data:/tmp/graph]
     expose: ['7687', '8443', '9090']
+    depends_on:
+      hydradb-init: { condition: service_completed_successfully }
     restart: unless-stopped
 
   migrate:
