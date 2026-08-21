@@ -128,6 +128,7 @@ pnpm build
 3. Copy `.env.example` to `.env`.
 4. Set `APP_DOMAIN=localhost` and provide a local `ACME_EMAIL` value.
 5. Create the five files under `secrets/` described in `.env.example`.
+   Keep the directory private to the host operator while making each explicitly mounted file readable by its non-root container UID.
 6. Start the private data services and run the schema migration.
 7. Run the native graph contract before starting the application services.
 8. Seed or reproduce the authentic proof from the supplied scripts.
@@ -137,6 +138,8 @@ git clone https://github.com/dmustapha/hydracut-hh.git
 cd hydracut-hh
 corepack enable
 pnpm install --frozen-lockfile
+chmod 0700 secrets
+chmod 0644 secrets/postgres_password secrets/database_url secrets/hydradb_token secrets/github_token secrets/app_operator_token
 docker compose up -d postgres hydradb
 docker compose run --rm migrate
 docker compose run --rm graph-contract

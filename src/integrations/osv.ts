@@ -199,5 +199,5 @@ export async function queryExactCoordinate(packageName: string, exactVersion: st
 }
 
 export function osvRequestDigest(packages: PackageInstance[]): string {
-  return canonicalDigest(packages.map(({ name, version }) => ({ name, version })));
+  return canonicalDigest(packages.map(({ key, name, version }) => ({ key, name, version })));
 }

@@ -12,7 +12,7 @@ import { sourceCache } from "../src/db/schema";
 import { extractSnapshot } from "../src/integrations/arborist";
 import { enrichCve } from "../src/integrations/enrichment";
 import { discoverProposedFixes, fetchRepositoryFile } from "../src/integrations/github";
-import { assertAdvisoryActive, fetchAdvisory, queryExactCoordinate, queryExactPackages, refreshSelectedAdvisory } from "../src/integrations/osv";
+import { assertAdvisoryActive, fetchAdvisory, osvRequestDigest, queryExactCoordinate, queryExactPackages, refreshSelectedAdvisory } from "../src/integrations/osv";
 
 const execute = promisify(execFile);
 
@@ -77,6 +77,12 @@ async function osvParityRows(repositories: Array<Record<string, string>>): Promi
 }
 
 describe("authentic frozen corpus", () => {
+  it("does not reuse package-keyed OSV cache payloads across snapshots", () => {
+    const pkg = { key: "snapshot-a:pkg", snapshotKey: "snapshot-a", location: "node_modules/example",
+      name: "example", version: "1.0.0", purl: "pkg:npm/example@1.0.0" };
+    expect(osvRequestDigest([pkg])).not.toBe(osvRequestDigest([{ ...pkg, key: "snapshot-b:pkg", snapshotKey: "snapshot-b" }]));
+  });
+
   it("extracts a malicious-script fixture without executing repository code", async () => {
     const marker = join(tmpdir(), `hydracut-execution-marker-${process.pid}`);
     await rm(marker, { force: true });
