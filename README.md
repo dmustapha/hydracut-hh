@@ -8,7 +8,7 @@ HydraCut is an AppSec incident command surface for bounded software supply chain
 [![Tests](https://img.shields.io/badge/stress_tests-158%2F158-brightgreen)](tests)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Live deployment:** [hydracut.34-255-142-141.sslip.io](https://hydracut.34-255-142-141.sslip.io) (single-operator bearer token required)
+**Live deployment:** [hydracut.34-255-142-141.sslip.io](https://hydracut.34-255-142-141.sslip.io) (public read access; operator bearer required for mutations)
 
 ![HydraCut forensic graph atlas](docs/images/landing.png)
 
@@ -69,7 +69,7 @@ The application validates matched source and target cardinality, cursor absence,
 Browser
   |
   v
-Caddy TLS and bearer boundary (public 80/443)
+Caddy TLS and public-read/operator-write boundary (public 80/443)
   |
   v
 Next.js web and API (private)
@@ -167,12 +167,12 @@ Never run `docker compose down -v` against a proof-bearing environment. The name
 | `HYDRADB_GRAPH_NAMESPACE` | HydraDB graph namespace |
 | `HYDRADB_TOKEN_FILE` | Mounted HydraDB bearer-token file |
 | `GITHUB_TOKEN_FILE` | Optional read-only GitHub token file |
-| `APP_OPERATOR_TOKEN` | Caddy single-operator bearer secret |
+| `APP_OPERATOR_TOKEN` | Caddy single-operator mutation bearer secret |
 | `SOURCE_CACHE_TTL_SECONDS` | External evidence freshness window |
 
 ## API reference
 
-The public Caddy edge requires `Authorization: Bearer <operator-token>`. Mutation routes also require an `Idempotency-Key` header and same-origin requests.
+Pages, static assets, and read APIs are public for judge access. Every `POST` requires `Authorization: Bearer <operator-token>`; mutation routes also require an `Idempotency-Key` header and a same-origin request. `DELETE`, `PUT`, and `PATCH` are refused at the edge.
 
 | Method | Endpoint | Description |
 |---|---|---|
