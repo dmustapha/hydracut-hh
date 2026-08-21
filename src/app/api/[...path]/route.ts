@@ -72,9 +72,20 @@ function idempotency(request: Request, body: unknown): string {
 
 const rateWindows = new Map<string, { minute: number; count: number }>();
 
+function acceptedMutationOrigins(request: Request): Set<string> {
+  const requestUrl = new URL(request.url);
+  const host = request.headers.get("host");
+  const forwardedProto = request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  const origins = new Set([requestUrl.origin]);
+  if (host && (forwardedProto === "http" || forwardedProto === "https")) {
+    origins.add(`${forwardedProto}://${host}`);
+  }
+  return origins;
+}
+
 function allowMutation(request: Request): boolean {
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin) throw new Error("CROSS_ORIGIN_MUTATION");
+  if (origin && !acceptedMutationOrigins(request).has(origin)) throw new Error("CROSS_ORIGIN_MUTATION");
   const operator = canonicalDigest(request.headers.get("authorization") ?? "proxy-authenticated-operator");
   const minute = Math.floor(Date.now() / 60_000);
   const row = rateWindows.get(operator);
