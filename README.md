@@ -8,6 +8,8 @@ HydraCut is an AppSec incident command surface for bounded software supply chain
 [![Tests](https://img.shields.io/badge/stress_tests-158%2F158-brightgreen)](tests)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
+**Live deployment:** [hydracut.34-255-142-141.sslip.io](https://hydracut.34-255-142-141.sslip.io) (single-operator bearer token required)
+
 ![HydraCut forensic graph atlas](docs/images/landing.png)
 
 ## What is HydraCut?

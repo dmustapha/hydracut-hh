@@ -45,6 +45,7 @@ WORKDIR /app
 RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nodejs nextjs
 COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=build --chown=nextjs:nodejs /app/public ./public
 # pnpm's symlinked @swc/helpers package is only partially traced by Next standalone.
 # Include its ESM helpers so the standalone server can resolve Next's generated imports.
 COPY --from=build --chown=nextjs:nodejs /app/node_modules/.pnpm/@swc+helpers@0.5.23/node_modules/@swc/helpers/esm ./node_modules/.pnpm/@swc+helpers@0.5.23/node_modules/@swc/helpers/esm

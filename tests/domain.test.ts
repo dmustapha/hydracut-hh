@@ -1,4 +1,5 @@
 // File: tests/domain.test.ts
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { canonicalDigest, canonicalJson } from "../src/domain/canonical";
 import { solveCoveragePlan } from "../src/domain/planner";
@@ -9,6 +10,13 @@ describe("canonical truth", () => {
   it("sorts keys and preserves array order", () => {
     expect(canonicalJson({ z: 1, a: [2, 1] })).toBe('{"a":[2,1],"z":1}');
     expect(canonicalDigest({ a: 1 })).toMatch(/^[a-f0-9]{64}$/);
+  });
+});
+
+describe("production image contract", () => {
+  it("ships the selected public brand assets with the standalone server", () => {
+    const dockerfile = readFileSync(new URL("../Dockerfile", import.meta.url), "utf8");
+    expect(dockerfile).toContain("COPY --from=build --chown=nextjs:nodejs /app/public ./public");
   });
 });
 
