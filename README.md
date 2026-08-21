@@ -20,6 +20,10 @@ The frozen proof corpus contains 3 public repository snapshots, 1,742 package in
 
 ## Screenshots
 
+| Live deployed command surface |
+|---|
+| ![Live HydraCut deployment](docs/images/live.png) |
+
 | Incident command | Native impact evidence |
 |---|---|
 | ![Incident queue](docs/images/incidents.png) | ![Impact traversal](docs/images/impact.png) |
